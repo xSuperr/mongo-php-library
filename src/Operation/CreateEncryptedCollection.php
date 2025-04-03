@@ -25,13 +25,10 @@ use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
-
+use StaticFunctions;
 use function array_key_exists;
 use function is_array;
 use function is_object;
-use function MongoDB\document_to_array;
-use function MongoDB\is_document;
-use function MongoDB\server_supports_feature;
 
 /**
  * Create an encrypted collection.
@@ -72,14 +69,14 @@ final class CreateEncryptedCollection
             throw new InvalidArgumentException('"encryptedFields" option is required');
         }
 
-        if (! is_document($this->options['encryptedFields'])) {
+        if (!StaticFunctions::is_document($this->options['encryptedFields'])) {
             throw InvalidArgumentException::expectedDocumentType('"encryptedFields" option', $this->options['encryptedFields']);
         }
 
         $this->createCollection = new CreateCollection($databaseName, $collectionName, $this->options);
 
         /** @psalm-var array{ecocCollection?: ?string, escCollection?: ?string} */
-        $encryptedFields = document_to_array($this->options['encryptedFields']);
+        $encryptedFields = StaticFunctions::document_to_array($this->options['encryptedFields']);
         $enxcolOptions = ['clusteredIndex' => ['key' => ['_id' => 1], 'unique' => true]];
 
         $this->createMetadataCollections = [
@@ -106,7 +103,7 @@ final class CreateEncryptedCollection
     public function createDataKeys(ClientEncryption $clientEncryption, string $kmsProvider, ?array $masterKey): array
     {
         /** @psalm-var array{fields: list<array{keyId: ?Binary}|object{keyId: ?Binary}>|Serializable|PackedArray} */
-        $encryptedFields = document_to_array($this->options['encryptedFields']);
+        $encryptedFields = StaticFunctions::document_to_array($this->options['encryptedFields']);
 
         // NOP if there are no fields to examine
         if (! isset($encryptedFields['fields'])) {
@@ -141,7 +138,7 @@ final class CreateEncryptedCollection
                 continue;
             }
 
-            $field = document_to_array($field);
+            $field = StaticFunctions::document_to_array($field);
 
             if (array_key_exists('keyId', $field) && $field['keyId'] === null) {
                 $field['keyId'] = $clientEncryption->createDataKey(...$createDataKeyArgs);
@@ -161,7 +158,7 @@ final class CreateEncryptedCollection
      */
     public function execute(Server $server): void
     {
-        if (! server_supports_feature($server, self::WIRE_VERSION_FOR_QUERYABLE_ENCRYPTION_V2)) {
+        if (!StaticFunctions::server_supports_feature($server, self::WIRE_VERSION_FOR_QUERYABLE_ENCRYPTION_V2)) {
             throw new UnsupportedException('Driver support of Queryable Encryption is incompatible with server. Upgrade server to use Queryable Encryption.');
         }
 

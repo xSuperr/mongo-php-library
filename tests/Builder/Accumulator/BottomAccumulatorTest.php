@@ -10,8 +10,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Builder\Type\Sort;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $bottom accumulator
@@ -31,7 +30,7 @@ class BottomAccumulatorTest extends PipelineTestCase
                         Expression::fieldPath('playerId'),
                         Expression::fieldPath('score'),
                     ],
-                    sortBy: object(
+                    sortBy: StaticFunctions::object(
                         score: Sort::Desc,
                     ),
                 ),
@@ -51,7 +50,7 @@ class BottomAccumulatorTest extends PipelineTestCase
                         Expression::fieldPath('playerId'),
                         Expression::fieldPath('score'),
                     ],
-                    sortBy: object(
+                    sortBy: StaticFunctions::object(
                         score: Sort::Desc,
                     ),
                 ),

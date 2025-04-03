@@ -21,9 +21,8 @@ use ArrayObject;
 use JsonSerializable;
 use MongoDB\BSON\Serializable;
 use MongoDB\BSON\Unserializable;
-
+use StaticFunctions;
 use function array_values;
-use function MongoDB\recursive_copy;
 
 /**
  * Model class for a BSON array.
@@ -41,7 +40,7 @@ class BSONArray extends ArrayObject implements JsonSerializable, Serializable, U
     public function __clone()
     {
         foreach ($this as $key => $value) {
-            $this[$key] = recursive_copy($value);
+            $this[$key] = StaticFunctions::recursive_copy($value);
         }
     }
 

@@ -9,8 +9,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Query;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $replaceRoot stage
@@ -35,7 +34,7 @@ class ReplaceRootStageTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::replaceRoot(
                 Expression::mergeObjects(
-                    object(_id: '', name: '', email: '', cell: '', home: ''),
+                    StaticFunctions::object(_id: '', name: '', email: '', cell: '', home: ''),
                     Expression::variable('ROOT'),
                 ),
             ),
@@ -48,7 +47,7 @@ class ReplaceRootStageTest extends PipelineTestCase
     {
         $pipeline = new Pipeline(
             Stage::replaceRoot(
-                object(
+                StaticFunctions::object(
                     full_name: Expression::concat(
                         Expression::stringFieldPath('first_name'),
                         ' ',
@@ -66,7 +65,7 @@ class ReplaceRootStageTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::replaceRoot(
                 Expression::mergeObjects(
-                    object(dogs: 0, cats: 0, birds: 0, fish: 0),
+                    StaticFunctions::object(dogs: 0, cats: 0, birds: 0, fish: 0),
                     Expression::objectFieldPath('pets'),
                 ),
             ),

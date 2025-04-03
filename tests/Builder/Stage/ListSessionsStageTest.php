@@ -7,8 +7,7 @@ namespace MongoDB\Tests\Builder\Stage;
 use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $listSessions stage
@@ -40,7 +39,7 @@ class ListSessionsStageTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::listSessions(
                 users: [
-                    object(user: 'myAppReader', db: 'test'),
+                    StaticFunctions::object(user: 'myAppReader', db: 'test'),
                 ],
             ),
         );

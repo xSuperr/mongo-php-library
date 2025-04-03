@@ -15,15 +15,13 @@ use MongoDB\GridFS\Bucket;
 use MongoDB\Operation\FindOneAndReplace;
 use MongoDB\Operation\FindOneAndUpdate;
 use PHPUnit\Framework\Assert;
+use StaticFunctions;
 use stdClass;
-
 use function array_diff_key;
 use function array_map;
 use function fclose;
 use function fopen;
 use function iterator_to_array;
-use function MongoDB\is_last_pipeline_operator_write;
-use function MongoDB\with_transaction;
 use function stream_get_contents;
 use function strtolower;
 
@@ -547,7 +545,7 @@ final class Operation
 
                 $options = isset($this->arguments['options']) ? (array) $this->arguments['options'] : [];
 
-                return with_transaction($session, $callback, $context->prepareOptions($options));
+                return StaticFunctions::with_transaction($session, $callback, $context->prepareOptions($options));
 
             default:
                 throw new LogicException('Unsupported session operation: ' . $this->name);
@@ -690,7 +688,7 @@ final class Operation
                  * the CRUD specification and is not implemented in the library
                  * since we have no concept of lazy cursors. Rely on examining
                  * the output collection rather than the operation result. */
-                if (is_last_pipeline_operator_write($this->arguments['pipeline'])) {
+                if (StaticFunctions::is_last_pipeline_operator_write($this->arguments['pipeline'])) {
                     return ResultExpectation::ASSERT_NOTHING;
                 }
 

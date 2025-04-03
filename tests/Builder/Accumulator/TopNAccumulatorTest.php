@@ -10,8 +10,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Builder\Type\Sort;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $topN accumulator
@@ -22,7 +21,7 @@ class TopNAccumulatorTest extends PipelineTestCase
     {
         $pipeline = new Pipeline(
             Stage::group(
-                _id: object(
+                _id: StaticFunctions::object(
                     gameId: Expression::fieldPath('gameId'),
                 ),
                 gamescores: Accumulator::topN(
@@ -35,7 +34,7 @@ class TopNAccumulatorTest extends PipelineTestCase
                         then: 1,
                         else: 3,
                     ),
-                    sortBy: object(
+                    sortBy: StaticFunctions::object(
                         score: Sort::Desc,
                     ),
                 ),
@@ -58,7 +57,7 @@ class TopNAccumulatorTest extends PipelineTestCase
                         Expression::fieldPath('playerId'),
                         Expression::fieldPath('score'),
                     ],
-                    sortBy: object(
+                    sortBy: StaticFunctions::object(
                         score: Sort::Desc,
                     ),
                     n: 3,
@@ -79,7 +78,7 @@ class TopNAccumulatorTest extends PipelineTestCase
                         Expression::fieldPath('playerId'),
                         Expression::fieldPath('score'),
                     ],
-                    sortBy: object(
+                    sortBy: StaticFunctions::object(
                         score: Sort::Desc,
                     ),
                     n: 3,

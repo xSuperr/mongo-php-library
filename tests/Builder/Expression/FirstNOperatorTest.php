@@ -8,8 +8,7 @@ use MongoDB\Builder\Expression;
 use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $firstN expression
@@ -31,7 +30,7 @@ class FirstNOperatorTest extends PipelineTestCase
     {
         $pipeline = new Pipeline(
             Stage::documents([
-                object(
+                StaticFunctions::object(
                     array: [10, 20, 30, 40],
                 ),
             ]),

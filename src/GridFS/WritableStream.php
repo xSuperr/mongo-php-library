@@ -22,10 +22,9 @@ use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Exception\InvalidArgumentException;
-
+use StaticFunctions;
 use function array_intersect_key;
 use function is_integer;
-use function MongoDB\is_document;
 use function sprintf;
 use function strlen;
 use function substr;
@@ -84,7 +83,7 @@ final class WritableStream
             throw new InvalidArgumentException(sprintf('Expected "chunkSizeBytes" option to be >= 1, %d given', $options['chunkSizeBytes']));
         }
 
-        if (isset($options['metadata']) && ! is_document($options['metadata'])) {
+        if (isset($options['metadata']) && !StaticFunctions::is_document($options['metadata'])) {
             throw InvalidArgumentException::expectedDocumentType('"metadata" option', $options['metadata']);
         }
 

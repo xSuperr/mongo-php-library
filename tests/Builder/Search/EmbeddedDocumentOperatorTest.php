@@ -10,8 +10,7 @@ use MongoDB\Builder\Search;
 use MongoDB\Builder\Stage;
 use MongoDB\Builder\Type\Sort;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test embeddedDocument search
@@ -39,8 +38,8 @@ class EmbeddedDocumentOperatorTest extends PipelineTestCase
                                 ),
                             ],
                         ),
-                    score: object(
-                        embedded: object(
+                    score: StaticFunctions::object(
+                        embedded: StaticFunctions::object(
                             aggregate: 'mean',
                         ),
                     ),
@@ -65,8 +64,8 @@ class EmbeddedDocumentOperatorTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::searchMeta(
                 Search::facet(
-                    facets: object(
-                        purchaseMethodFacet: object(
+                    facets: StaticFunctions::object(
+                        purchaseMethodFacet: StaticFunctions::object(
                             type: 'string',
                             path: 'purchaseMethod',
                         ),

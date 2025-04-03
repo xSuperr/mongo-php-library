@@ -26,9 +26,8 @@ use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
 use MongoDB\InsertOneResult;
-
+use StaticFunctions;
 use function is_bool;
-use function MongoDB\is_document;
 
 /**
  * Operation for inserting a single document with the insert command.
@@ -160,7 +159,7 @@ final class InsertOne
             $document = $codec->encode($document);
         }
 
-        if (! is_document($document)) {
+        if (!StaticFunctions::is_document($document)) {
             throw InvalidArgumentException::expectedDocumentType('$document', $document);
         }
 

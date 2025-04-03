@@ -25,13 +25,12 @@ use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
 use MongoDB\Model\IndexInput;
-
+use StaticFunctions;
 use function array_is_list;
 use function array_map;
 use function is_array;
 use function is_integer;
 use function is_string;
-use function MongoDB\server_supports_feature;
 use function sprintf;
 
 /**
@@ -171,7 +170,7 @@ final class CreateIndexes
         if (isset($this->options['commitQuorum'])) {
             /* Drivers MUST manually raise an error if this option is specified
              * when creating an index on a pre 4.4 server. */
-            if (! server_supports_feature($server, self::WIRE_VERSION_FOR_COMMIT_QUORUM)) {
+            if (!StaticFunctions::server_supports_feature($server, self::WIRE_VERSION_FOR_COMMIT_QUORUM)) {
                 throw UnsupportedException::commitQuorumNotSupported();
             }
 

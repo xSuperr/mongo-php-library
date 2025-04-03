@@ -9,8 +9,7 @@ use MongoDB\Builder\Expression;
 use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $accumulator accumulator
@@ -59,7 +58,7 @@ class AccumulatorAccumulatorTest extends PipelineTestCase
     {
         $pipeline = new Pipeline(
             Stage::group(
-                _id: object(city: Expression::fieldPath('city')),
+                _id: StaticFunctions::object(city: Expression::fieldPath('city')),
                 restaurants: Accumulator::accumulator(
                     init: <<<'JS'
                         function(city, userProfileCity) {

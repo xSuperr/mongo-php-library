@@ -9,8 +9,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Search;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test moreLikeThis search
@@ -24,7 +23,7 @@ class MoreLikeThisOperatorTest extends PipelineTestCase
                 Search::compound(
                     must: [
                         Search::moreLikeThis(
-                            like: object(
+                            like: StaticFunctions::object(
                                 _id: new ObjectId('573a1396f29313caabce4a9a'),
                                 genres: [
                                     'Crime',
@@ -67,7 +66,7 @@ class MoreLikeThisOperatorTest extends PipelineTestCase
                     ],
                     should: [
                         Search::moreLikeThis(
-                            like: object(
+                            like: StaticFunctions::object(
                                 _id: new ObjectId('573a1396f29313caabce4a9a'),
                                 genres: [
                                     'Crime',
@@ -95,7 +94,7 @@ class MoreLikeThisOperatorTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::search(
                 Search::moreLikeThis(
-                    like: object(
+                    like: StaticFunctions::object(
                         title: 'The Godfather',
                         genres: 'action',
                     ),

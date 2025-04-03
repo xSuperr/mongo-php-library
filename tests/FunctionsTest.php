@@ -10,16 +10,8 @@ use MongoDB\Driver\WriteConcern;
 use MongoDB\Model\BSONArray;
 use MongoDB\Model\BSONDocument;
 use PHPUnit\Framework\Attributes\DataProvider;
+use StaticFunctions;
 use TypeError;
-
-use function MongoDB\apply_type_map_to_document;
-use function MongoDB\create_field_path_type_map;
-use function MongoDB\document_to_array;
-use function MongoDB\is_builder_pipeline;
-use function MongoDB\is_first_key_operator;
-use function MongoDB\is_last_pipeline_operator_write;
-use function MongoDB\is_pipeline;
-use function MongoDB\is_write_concern_acknowledged;
 
 /**
  * Unit tests for utility functions.
@@ -29,7 +21,7 @@ class FunctionsTest extends TestCase
     #[DataProvider('provideDocumentAndTypeMap')]
     public function testApplyTypeMapToDocument($document, array $typeMap, $expectedDocument): void
     {
-        $this->assertEquals($expectedDocument, apply_type_map_to_document($document, $typeMap));
+        $this->assertEquals($expectedDocument, StaticFunctions::apply_type_map_to_document($document, $typeMap));
     }
 
     public static function provideDocumentAndTypeMap()
@@ -99,7 +91,7 @@ class FunctionsTest extends TestCase
     #[DataProvider('provideDocumentsAndExpectedArrays')]
     public function testDocumentToArray($document, array $expectedArray): void
     {
-        $this->assertSame($expectedArray, document_to_array($document));
+        $this->assertSame($expectedArray, StaticFunctions::document_to_array($document));
     }
 
     public static function provideDocumentsAndExpectedArrays(): array
@@ -119,7 +111,7 @@ class FunctionsTest extends TestCase
     public function testDocumentToArrayArgumentTypeCheck($document): void
     {
         $this->expectException(TypeError::class);
-        document_to_array($document);
+        StaticFunctions::document_to_array($document);
     }
 
     public static function provideInvalidDocumentValuesForChecks(): array
@@ -145,25 +137,25 @@ class FunctionsTest extends TestCase
     #[DataProvider('provideDocumentCasts')]
     public function testIsFirstKeyOperator(callable $cast): void
     {
-        $this->assertFalse(is_first_key_operator($cast(['y' => 1])));
-        $this->assertTrue(is_first_key_operator($cast(['$set' => ['y' => 1]])));
+        $this->assertFalse(StaticFunctions::is_first_key_operator($cast(['y' => 1])));
+        $this->assertTrue(StaticFunctions::is_first_key_operator($cast(['$set' => ['y' => 1]])));
 
         // Empty and packed arrays are unlikely arguments, but still valid
-        $this->assertFalse(is_first_key_operator($cast([])));
-        $this->assertFalse(is_first_key_operator($cast(['foo'])));
+        $this->assertFalse(StaticFunctions::is_first_key_operator($cast([])));
+        $this->assertFalse(StaticFunctions::is_first_key_operator($cast(['foo'])));
     }
 
     #[DataProvider('provideInvalidDocumentValuesForChecks')]
     public function testIsFirstKeyOperatorArgumentTypeCheck($document): void
     {
         $this->expectException(TypeError::class);
-        is_first_key_operator($document);
+        StaticFunctions::is_first_key_operator($document);
     }
 
     #[DataProvider('provideTypeMapValues')]
     public function testCreateFieldPathTypeMap(array $expected, array $typeMap, $fieldPath = 'field'): void
     {
-        $this->assertEquals($expected, create_field_path_type_map($typeMap, $fieldPath));
+        $this->assertEquals($expected, StaticFunctions::create_field_path_type_map($typeMap, $fieldPath));
     }
 
     public static function provideTypeMapValues()
@@ -227,19 +219,19 @@ class FunctionsTest extends TestCase
         $merge = ['$merge' => ['into' => 'coll']];
         $out = ['$out' => ['db' => 'db', 'coll' => 'coll']];
 
-        $this->assertTrue(is_last_pipeline_operator_write([$cast($merge)]));
-        $this->assertTrue(is_last_pipeline_operator_write([$cast($out)]));
-        $this->assertTrue(is_last_pipeline_operator_write([$cast($match), $cast($merge)]));
-        $this->assertTrue(is_last_pipeline_operator_write([$cast($match), $cast($out)]));
-        $this->assertFalse(is_last_pipeline_operator_write([$cast($match)]));
-        $this->assertFalse(is_last_pipeline_operator_write([$cast($merge), $cast($match)]));
-        $this->assertFalse(is_last_pipeline_operator_write([$cast($out), $cast($match)]));
+        $this->assertTrue(StaticFunctions::is_last_pipeline_operator_write([$cast($merge)]));
+        $this->assertTrue(StaticFunctions::is_last_pipeline_operator_write([$cast($out)]));
+        $this->assertTrue(StaticFunctions::is_last_pipeline_operator_write([$cast($match), $cast($merge)]));
+        $this->assertTrue(StaticFunctions::is_last_pipeline_operator_write([$cast($match), $cast($out)]));
+        $this->assertFalse(StaticFunctions::is_last_pipeline_operator_write([$cast($match)]));
+        $this->assertFalse(StaticFunctions::is_last_pipeline_operator_write([$cast($merge), $cast($match)]));
+        $this->assertFalse(StaticFunctions::is_last_pipeline_operator_write([$cast($out), $cast($match)]));
     }
 
     #[DataProvider('providePipelines')]
     public function testIsPipeline($expected, $pipeline, $allowEmpty = false): void
     {
-        $this->assertSame($expected, is_pipeline($pipeline, $allowEmpty));
+        $this->assertSame($expected, StaticFunctions::is_pipeline($pipeline, $allowEmpty));
     }
 
     public static function providePipelines(): array
@@ -303,7 +295,7 @@ class FunctionsTest extends TestCase
     #[DataProvider('provideStagePipelines')]
     public function testIsBuilderPipeline($expected, $pipeline): void
     {
-        $this->assertSame($expected, is_builder_pipeline($pipeline));
+        $this->assertSame($expected, StaticFunctions::is_builder_pipeline($pipeline));
     }
 
     public static function provideStagePipelines(): iterable
@@ -318,7 +310,7 @@ class FunctionsTest extends TestCase
     #[DataProvider('provideWriteConcerns')]
     public function testIsWriteConcernAcknowledged($expected, WriteConcern $writeConcern): void
     {
-        $this->assertSame($expected, is_write_concern_acknowledged($writeConcern));
+        $this->assertSame($expected, StaticFunctions::is_write_concern_acknowledged($writeConcern));
     }
 
     public static function provideWriteConcerns(): array

@@ -23,10 +23,9 @@ use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
 use MongoDB\Exception\InvalidArgumentException;
-
+use StaticFunctions;
 use function is_bool;
 use function is_integer;
-use function MongoDB\is_document;
 
 /**
  * Wrapper for the listCollections command.
@@ -71,7 +70,7 @@ final class ListCollections
             throw InvalidArgumentException::invalidType('"authorizedCollections" option', $options['authorizedCollections'], 'boolean');
         }
 
-        if (isset($options['filter']) && ! is_document($options['filter'])) {
+        if (isset($options['filter']) && !StaticFunctions::is_document($options['filter'])) {
             throw InvalidArgumentException::expectedDocumentType('"filter" option', $options['filter']);
         }
 

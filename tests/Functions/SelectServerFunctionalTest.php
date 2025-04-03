@@ -6,8 +6,7 @@ use MongoDB\Driver\ReadPreference;
 use MongoDB\Driver\Server;
 use MongoDB\Tests\FunctionalTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
-
-use function MongoDB\select_server;
+use StaticFunctions;
 
 class SelectServerFunctionalTest extends FunctionalTestCase
 {
@@ -39,7 +38,7 @@ class SelectServerFunctionalTest extends FunctionalTestCase
 
         $this->assertTrue($session->isInTransaction());
         $this->assertInstanceOf(Server::class, $session->getServer(), 'Session is pinned');
-        $this->assertEquals($session->getServer(), select_server($client->getManager(), ['session' => $session]));
+        $this->assertEquals($session->getServer(), StaticFunctions::select_server($client->getManager(), ['session' => $session]));
     }
 
     public static function providePinnedOptions(): array

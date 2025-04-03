@@ -10,8 +10,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Query;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $bucket stage
@@ -25,10 +24,10 @@ class BucketStageTest extends PipelineTestCase
                 groupBy: Expression::fieldPath('year_born'),
                 boundaries: [1840, 1850, 1860, 1870, 1880],
                 default: 'Other',
-                output: object(
+                output: StaticFunctions::object(
                     count: Accumulator::sum(1),
                     artists: Accumulator::push(
-                        object(
+                        StaticFunctions::object(
                             name: Expression::concat(
                                 Expression::stringFieldPath('first_name'),
                                 ' ',
@@ -56,10 +55,10 @@ class BucketStageTest extends PipelineTestCase
                         groupBy: Expression::numberFieldPath('price'),
                         boundaries: [0, 200, 400],
                         default: 'Other',
-                        output: object(
+                        output: StaticFunctions::object(
                             count: Accumulator::sum(1),
                             artwork: Accumulator::push(
-                                object(
+                                StaticFunctions::object(
                                     title: Expression::stringFieldPath('title'),
                                     price: Expression::stringFieldPath('price'),
                                 ),
@@ -75,10 +74,10 @@ class BucketStageTest extends PipelineTestCase
                         groupBy: Expression::stringFieldPath('year'),
                         boundaries: [1890, 1910, 1920, 1940],
                         default: 'Unknown',
-                        output: object(
+                        output: StaticFunctions::object(
                             count: Accumulator::sum(1),
                             artwork: Accumulator::push(
-                                object(
+                                StaticFunctions::object(
                                     title: Expression::stringFieldPath('title'),
                                     year: Expression::stringFieldPath('year'),
                                 ),

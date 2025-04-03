@@ -23,10 +23,7 @@ use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
 use MongoDB\UpdateResult;
-
-use function MongoDB\is_document;
-use function MongoDB\is_first_key_operator;
-use function MongoDB\is_pipeline;
+use StaticFunctions;
 
 /**
  * Operation for replacing a single document with the update command.
@@ -123,7 +120,7 @@ final class ReplaceOne
             $replacement = $codec->encode($replacement);
         }
 
-        if (! is_document($replacement)) {
+        if (!StaticFunctions::is_document($replacement)) {
             throw InvalidArgumentException::expectedDocumentType('$replacement', $replacement);
         }
 
@@ -132,11 +129,11 @@ final class ReplaceOne
             $replacement = (object) $replacement;
         }
 
-        if (is_first_key_operator($replacement)) {
+        if (StaticFunctions::is_first_key_operator($replacement)) {
             throw new InvalidArgumentException('First key in $replacement is an update operator');
         }
 
-        if (is_pipeline($replacement, true /* allowEmpty */)) {
+        if (StaticFunctions::is_pipeline($replacement, true /* allowEmpty */)) {
             throw new InvalidArgumentException('$replacement is an update pipeline');
         }
 

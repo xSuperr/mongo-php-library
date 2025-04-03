@@ -10,8 +10,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Search;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $searchMeta stage
@@ -23,8 +22,8 @@ class SearchMetaStageTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::searchMeta(
                 Search::facet(
-                    facets: object(
-                        titleFacet: object(
+                    facets: StaticFunctions::object(
+                        titleFacet: StaticFunctions::object(
                             type: 'string',
                             path: 'title',
                         ),
@@ -50,8 +49,8 @@ class SearchMetaStageTest extends PipelineTestCase
                         gte: new UTCDateTime(new DateTimeImmutable('2000-01-01')),
                         lte: new UTCDateTime(new DateTimeImmutable('2015-01-31')),
                     ),
-                    facets: object(
-                        yearFacet: object(
+                    facets: StaticFunctions::object(
+                        yearFacet: StaticFunctions::object(
                             type: 'date',
                             path: 'released',
                             boundaries: [
@@ -79,7 +78,7 @@ class SearchMetaStageTest extends PipelineTestCase
                     gte: 1998,
                     lt: 1999,
                 ),
-                count: object(type: 'total'),
+                count: StaticFunctions::object(type: 'total'),
             ),
         );
 
@@ -96,13 +95,13 @@ class SearchMetaStageTest extends PipelineTestCase
                         gte: new UTCDateTime(new DateTimeImmutable('2000-01-01')),
                         lte: new UTCDateTime(new DateTimeImmutable('2015-01-31')),
                     ),
-                    facets: object(
-                        directorsFacet: object(
+                    facets: StaticFunctions::object(
+                        directorsFacet: StaticFunctions::object(
                             type: 'string',
                             path: 'directors',
                             numBuckets: 7,
                         ),
-                        yearFacet: object(
+                        yearFacet: StaticFunctions::object(
                             type: 'number',
                             path: 'year',
                             boundaries: [
@@ -130,8 +129,8 @@ class SearchMetaStageTest extends PipelineTestCase
                         gte: 1980,
                         lte: 2000,
                     ),
-                    facets: object(
-                        yearFacet: object(
+                    facets: StaticFunctions::object(
+                        yearFacet: StaticFunctions::object(
                             type: 'number',
                             path: 'year',
                             boundaries: [

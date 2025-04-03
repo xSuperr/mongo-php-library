@@ -8,8 +8,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Search;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test autocomplete search
@@ -64,7 +63,7 @@ class AutocompleteOperatorTest extends PipelineTestCase
                 Search::autocomplete(
                     query: 'pre',
                     path: 'title',
-                    fuzzy: object(
+                    fuzzy: StaticFunctions::object(
                         maxEdits: 1,
                         prefixLength: 1,
                         maxExpansions: 256,
@@ -86,7 +85,7 @@ class AutocompleteOperatorTest extends PipelineTestCase
                     query: 'ger',
                     path: 'title',
                 ),
-                highlight: object(
+                highlight: StaticFunctions::object(
                     path: 'title',
                 ),
             ),

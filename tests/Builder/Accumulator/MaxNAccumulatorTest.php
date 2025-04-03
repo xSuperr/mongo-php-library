@@ -9,8 +9,7 @@ use MongoDB\Builder\Expression;
 use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $maxN accumulator
@@ -21,7 +20,7 @@ class MaxNAccumulatorTest extends PipelineTestCase
     {
         $pipeline = new Pipeline(
             Stage::group(
-                _id: object(
+                _id: StaticFunctions::object(
                     gameId: Expression::fieldPath('gameId'),
                 ),
                 gamescores: Accumulator::maxN(

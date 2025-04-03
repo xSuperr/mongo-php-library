@@ -43,9 +43,9 @@ use MongoDB\Operation\DropDatabase;
 use MongoDB\Operation\ListDatabaseNames;
 use MongoDB\Operation\ListDatabases;
 use MongoDB\Operation\Watch;
+use StaticFunctions;
 use stdClass;
 use Throwable;
-
 use function array_diff_key;
 use function is_array;
 use function is_string;
@@ -219,9 +219,9 @@ class Client
      */
     public function dropDatabase(string $databaseName, array $options = []): void
     {
-        $server = select_server_for_write($this->manager, $options);
+        $server = StaticFunctions::select_server_for_write($this->manager, $options);
 
-        if (! isset($options['writeConcern']) && ! is_in_transaction($options)) {
+        if (! isset($options['writeConcern']) && !StaticFunctions::is_in_transaction($options)) {
             $options['writeConcern'] = $this->writeConcern;
         }
 
@@ -317,7 +317,7 @@ class Client
     public function listDatabaseNames(array $options = []): Iterator
     {
         $operation = new ListDatabaseNames($options);
-        $server = select_server($this->manager, $options);
+        $server = StaticFunctions::select_server($this->manager, $options);
 
         return $operation->execute($server);
     }
@@ -334,7 +334,7 @@ class Client
     public function listDatabases(array $options = []): Iterator
     {
         $operation = new ListDatabases($options);
-        $server = select_server($this->manager, $options);
+        $server = StaticFunctions::select_server($this->manager, $options);
 
         return $operation->execute($server);
     }
@@ -397,19 +397,19 @@ class Client
      */
     public function watch(array $pipeline = [], array $options = []): ChangeStream
     {
-        if (is_builder_pipeline($pipeline)) {
+        if (StaticFunctions::is_builder_pipeline($pipeline)) {
             $pipeline = new Pipeline(...$pipeline);
         }
 
         $pipeline = $this->builderEncoder->encodeIfSupported($pipeline);
 
-        if (! isset($options['readPreference']) && ! is_in_transaction($options)) {
+        if (! isset($options['readPreference']) && !StaticFunctions::is_in_transaction($options)) {
             $options['readPreference'] = $this->readPreference;
         }
 
-        $server = select_server($this->manager, $options);
+        $server = StaticFunctions::select_server($this->manager, $options);
 
-        if (! isset($options['readConcern']) && ! is_in_transaction($options)) {
+        if (! isset($options['readConcern']) && !StaticFunctions::is_in_transaction($options)) {
             $options['readConcern'] = $this->readConcern;
         }
 

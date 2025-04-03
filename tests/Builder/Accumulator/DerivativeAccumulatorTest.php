@@ -12,8 +12,7 @@ use MongoDB\Builder\Stage;
 use MongoDB\Builder\Type\Sort;
 use MongoDB\Builder\Type\TimeUnit;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $derivative accumulator
@@ -25,10 +24,10 @@ class DerivativeAccumulatorTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::setWindowFields(
                 partitionBy: Expression::stringFieldPath('truckID'),
-                sortBy: object(
+                sortBy: StaticFunctions::object(
                     timeStamp: Sort::Asc,
                 ),
-                output: object(
+                output: StaticFunctions::object(
                     truckAverageSpeed: Accumulator::outputWindow(
                         Accumulator::derivative(
                             input: Expression::numberFieldPath('miles'),

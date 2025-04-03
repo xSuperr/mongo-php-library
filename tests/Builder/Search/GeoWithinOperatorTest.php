@@ -8,8 +8,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Search;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test geoWithin search
@@ -22,15 +21,15 @@ class GeoWithinOperatorTest extends PipelineTestCase
             Stage::search(
                 Search::geoWithin(
                     path: 'address.location',
-                    box: object(
-                        bottomLeft: object(
+                    box: StaticFunctions::object(
+                        bottomLeft: StaticFunctions::object(
                             type: 'Point',
                             coordinates: [
                                 112.467,
                                 -55.05,
                             ],
                         ),
-                        topRight: object(
+                        topRight: StaticFunctions::object(
                             type: 'Point',
                             coordinates: [
                                 168,
@@ -57,8 +56,8 @@ class GeoWithinOperatorTest extends PipelineTestCase
             Stage::search(
                 Search::geoWithin(
                     path: 'address.location',
-                    circle: object(
-                        center: object(
+                    circle: StaticFunctions::object(
+                        center: StaticFunctions::object(
                             type: 'Point',
                             coordinates: [
                                 -73.54,
@@ -86,7 +85,7 @@ class GeoWithinOperatorTest extends PipelineTestCase
             Stage::search(
                 Search::geoWithin(
                     path: 'address.location',
-                    geometry: object(
+                    geometry: StaticFunctions::object(
                         type: 'Polygon',
                         coordinates: [
                             [

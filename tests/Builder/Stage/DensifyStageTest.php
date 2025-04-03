@@ -10,8 +10,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Builder\Type\TimeUnit;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $densify stage
@@ -24,7 +23,7 @@ class DensifyStageTest extends PipelineTestCase
             Stage::densify(
                 field: 'altitude',
                 partitionByFields: ['variety'],
-                range: object(
+                range: StaticFunctions::object(
                     bounds: 'full',
                     step: 200,
                 ),
@@ -39,7 +38,7 @@ class DensifyStageTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::densify(
                 field: 'timestamp',
-                range: object(
+                range: StaticFunctions::object(
                     step: 1,
                     unit: TimeUnit::Hour,
                     bounds: [

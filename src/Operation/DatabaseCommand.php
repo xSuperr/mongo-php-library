@@ -23,9 +23,8 @@ use MongoDB\Driver\ReadPreference;
 use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
 use MongoDB\Exception\InvalidArgumentException;
-
+use StaticFunctions;
 use function is_array;
-use function MongoDB\is_document;
 
 /**
  * Operation for executing a database command.
@@ -59,7 +58,7 @@ final class DatabaseCommand
      */
     public function __construct(private string $databaseName, array|object $command, private array $options = [])
     {
-        if (! is_document($command)) {
+        if (!StaticFunctions::is_document($command)) {
             throw InvalidArgumentException::expectedDocumentType('$command', $command);
         }
 

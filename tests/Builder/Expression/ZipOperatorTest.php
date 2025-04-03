@@ -8,8 +8,7 @@ use MongoDB\Builder\Expression;
 use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $zip expression
@@ -27,7 +26,7 @@ class ZipOperatorTest extends PipelineTestCase
                         Expression::range(0, Expression::size(Expression::arrayFieldPath('pages'))),
                     ]),
                     cond: Expression::let(
-                        vars: object(
+                        vars: StaticFunctions::object(
                             page: Expression::arrayElemAt(Expression::variable('pageWithIndex'), 0),
                         ),
                         in: Expression::gte(Expression::variable('page.reviews'), 1),

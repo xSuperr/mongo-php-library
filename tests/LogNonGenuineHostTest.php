@@ -7,10 +7,8 @@ use MongoDB\Driver\Exception\InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerInterface;
-
+use StaticFunctions;
 use function func_get_args;
-use function MongoDB\add_logger;
-use function MongoDB\remove_logger;
 
 /** @see https://jira.mongodb.org/browse/DRIVERS-2583 */
 class LogNonGenuineHostTest extends TestCase
@@ -21,12 +19,12 @@ class LogNonGenuineHostTest extends TestCase
     {
         $this->logger = $this->createTestPsrLogger();
 
-        add_logger($this->logger);
+        StaticFunctions::add_logger($this->logger);
     }
 
     public function tearDown(): void
     {
-        remove_logger($this->logger);
+        StaticFunctions::remove_logger($this->logger);
     }
 
     #[DataProvider('provideCosmosUris')]

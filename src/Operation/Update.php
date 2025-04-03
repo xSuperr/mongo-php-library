@@ -25,15 +25,10 @@ use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
 use MongoDB\UpdateResult;
-
+use StaticFunctions;
 use function is_array;
 use function is_bool;
 use function is_string;
-use function MongoDB\is_document;
-use function MongoDB\is_first_key_operator;
-use function MongoDB\is_pipeline;
-use function MongoDB\is_write_concern_acknowledged;
-use function MongoDB\server_supports_feature;
 
 /**
  * Operation for the update command.
@@ -100,7 +95,7 @@ final class Update implements Explainable
      */
     public function __construct(private string $databaseName, private string $collectionName, private array|object $filter, private array|object $update, array $options = [])
     {
-        if (! is_document($filter)) {
+        if (!StaticFunctions::is_document($filter)) {
             throw InvalidArgumentException::expectedDocumentType('$filter', $filter);
         }
 
@@ -117,11 +112,11 @@ final class Update implements Explainable
             throw InvalidArgumentException::invalidType('"bypassDocumentValidation" option', $options['bypassDocumentValidation'], 'boolean');
         }
 
-        if (isset($options['collation']) && ! is_document($options['collation'])) {
+        if (isset($options['collation']) && !StaticFunctions::is_document($options['collation'])) {
             throw InvalidArgumentException::expectedDocumentType('"collation" option', $options['collation']);
         }
 
-        if (isset($options['hint']) && ! is_string($options['hint']) && ! is_document($options['hint'])) {
+        if (isset($options['hint']) && ! is_string($options['hint']) && !StaticFunctions::is_document($options['hint'])) {
             throw InvalidArgumentException::expectedDocumentOrStringType('"hint" option', $options['hint']);
         }
 
@@ -129,7 +124,7 @@ final class Update implements Explainable
             throw InvalidArgumentException::invalidType('"multi" option', $options['multi'], 'boolean');
         }
 
-        if ($options['multi'] && ! is_first_key_operator($update) && ! is_pipeline($update)) {
+        if ($options['multi'] && !StaticFunctions::is_first_key_operator($update) && !StaticFunctions::is_pipeline($update)) {
             throw new InvalidArgumentException('"multi" option cannot be true unless $update has update operator(s) or non-empty pipeline');
         }
 
@@ -145,11 +140,11 @@ final class Update implements Explainable
             throw InvalidArgumentException::invalidType('"writeConcern" option', $options['writeConcern'], WriteConcern::class);
         }
 
-        if (isset($options['let']) && ! is_document($options['let'])) {
+        if (isset($options['let']) && !StaticFunctions::is_document($options['let'])) {
             throw InvalidArgumentException::expectedDocumentType('"let" option', $options['let']);
         }
 
-        if (isset($options['sort']) && ! is_document($options['sort'])) {
+        if (isset($options['sort']) && !StaticFunctions::is_document($options['sort'])) {
             throw InvalidArgumentException::expectedDocumentType('"sort" option', $options['sort']);
         }
 
@@ -179,8 +174,8 @@ final class Update implements Explainable
         /* CRUD spec requires a client-side error when using "hint" with an
          * unacknowledged write concern on an unsupported server. */
         if (
-            isset($this->options['writeConcern']) && ! is_write_concern_acknowledged($this->options['writeConcern']) &&
-            isset($this->options['hint']) && ! server_supports_feature($server, self::WIRE_VERSION_FOR_HINT)
+            isset($this->options['writeConcern']) && !StaticFunctions::is_write_concern_acknowledged($this->options['writeConcern']) &&
+            isset($this->options['hint']) && !StaticFunctions::server_supports_feature($server, self::WIRE_VERSION_FOR_HINT)
         ) {
             throw UnsupportedException::hintNotSupported();
         }

@@ -10,8 +10,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Search;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test near search
@@ -29,7 +28,7 @@ class NearOperatorTest extends PipelineTestCase
                     ),
                     should: Search::near(
                         path: 'address.location',
-                        origin: object(
+                        origin: StaticFunctions::object(
                             type: 'Point',
                             coordinates: [
                                 114.15027,
@@ -81,7 +80,7 @@ class NearOperatorTest extends PipelineTestCase
             Stage::search(
                 Search::near(
                     path: 'address.location',
-                    origin: object(
+                    origin: StaticFunctions::object(
                         type: 'Point',
                         coordinates: [
                             -8.61308,

@@ -22,12 +22,9 @@ use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
-
+use StaticFunctions;
 use function array_key_exists;
 use function is_integer;
-use function MongoDB\is_document;
-use function MongoDB\is_first_key_operator;
-use function MongoDB\is_pipeline;
 
 /**
  * Operation for replacing a document with the findAndModify command.
@@ -104,7 +101,7 @@ final class FindOneAndReplace implements Explainable
      */
     public function __construct(string $databaseName, string $collectionName, array|object $filter, array|object $replacement, array $options = [])
     {
-        if (! is_document($filter)) {
+        if (!StaticFunctions::is_document($filter)) {
             throw InvalidArgumentException::expectedDocumentType('$filter', $filter);
         }
 
@@ -112,7 +109,7 @@ final class FindOneAndReplace implements Explainable
             throw InvalidArgumentException::invalidType('"codec" option', $options['codec'], DocumentCodec::class);
         }
 
-        if (isset($options['projection']) && ! is_document($options['projection'])) {
+        if (isset($options['projection']) && !StaticFunctions::is_document($options['projection'])) {
             throw InvalidArgumentException::expectedDocumentType('"projection" option', $options['projection']);
         }
 
@@ -174,7 +171,7 @@ final class FindOneAndReplace implements Explainable
             $replacement = $codec->encode($replacement);
         }
 
-        if (! is_document($replacement)) {
+        if (!StaticFunctions::is_document($replacement)) {
             throw InvalidArgumentException::expectedDocumentType('$replacement', $replacement);
         }
 
@@ -183,11 +180,11 @@ final class FindOneAndReplace implements Explainable
             $replacement = (object) $replacement;
         }
 
-        if (is_first_key_operator($replacement)) {
+        if (StaticFunctions::is_first_key_operator($replacement)) {
             throw new InvalidArgumentException('First key in $replacement is an update operator');
         }
 
-        if (is_pipeline($replacement, true /* allowEmpty */)) {
+        if (StaticFunctions::is_pipeline($replacement, true /* allowEmpty */)) {
             throw new InvalidArgumentException('$replacement is an update pipeline');
         }
 

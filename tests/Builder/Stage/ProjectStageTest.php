@@ -8,8 +8,7 @@ use MongoDB\Builder\Expression;
 use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $project stage
@@ -50,7 +49,7 @@ class ProjectStageTest extends PipelineTestCase
                 ...['lastModified' => 0],
             ),
             Stage::project(
-                author: object(first: 0),
+                author: StaticFunctions::object(first: 0),
                 lastModified: 0,
             ),
         );
@@ -74,7 +73,7 @@ class ProjectStageTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::project(
                 title: 1,
-                isbn: object(
+                isbn: StaticFunctions::object(
                     prefix: Expression::substr(
                         Expression::stringFieldPath('isbn'),
                         0,
@@ -116,7 +115,7 @@ class ProjectStageTest extends PipelineTestCase
                 ...['stop.title' => 1],
             ),
             Stage::project(
-                stop: object(title: 1),
+                stop: StaticFunctions::object(title: 1),
             ),
         );
 

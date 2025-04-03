@@ -12,8 +12,7 @@ use MongoDB\Builder\Search;
 use MongoDB\Builder\Stage;
 use MongoDB\Builder\Variable;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test facet search
@@ -25,8 +24,8 @@ class FacetOperatorTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::search(
                 Search::facet(
-                    facets: object(
-                        genresFacet: object(
+                    facets: StaticFunctions::object(
+                        genresFacet: StaticFunctions::object(
                             type: 'string',
                             path: 'genres',
                         ),

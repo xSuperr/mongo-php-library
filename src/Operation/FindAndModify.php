@@ -27,7 +27,7 @@ use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnexpectedValueException;
 use MongoDB\Exception\UnsupportedException;
-
+use StaticFunctions;
 use function array_key_exists;
 use function assert;
 use function current;
@@ -36,11 +36,6 @@ use function is_bool;
 use function is_integer;
 use function is_object;
 use function is_string;
-use function MongoDB\create_field_path_type_map;
-use function MongoDB\is_document;
-use function MongoDB\is_pipeline;
-use function MongoDB\is_write_concern_acknowledged;
-use function MongoDB\server_supports_feature;
 
 /**
  * Operation for the findAndModify command.
@@ -143,15 +138,15 @@ final class FindAndModify implements Explainable
             throw InvalidArgumentException::invalidType('"codec" option', $options['codec'], DocumentCodec::class);
         }
 
-        if (isset($options['collation']) && ! is_document($options['collation'])) {
+        if (isset($options['collation']) && !StaticFunctions::is_document($options['collation'])) {
             throw InvalidArgumentException::expectedDocumentType('"collation" option', $options['collation']);
         }
 
-        if (isset($options['fields']) && ! is_document($options['fields'])) {
+        if (isset($options['fields']) && !StaticFunctions::is_document($options['fields'])) {
             throw InvalidArgumentException::expectedDocumentType('"fields" option', $options['fields']);
         }
 
-        if (isset($options['hint']) && ! is_string($options['hint']) && ! is_document($options['hint'])) {
+        if (isset($options['hint']) && ! is_string($options['hint']) && !StaticFunctions::is_document($options['hint'])) {
             throw InvalidArgumentException::expectedDocumentOrStringType('"hint" option', $options['hint']);
         }
 
@@ -163,7 +158,7 @@ final class FindAndModify implements Explainable
             throw InvalidArgumentException::invalidType('"new" option', $options['new'], 'boolean');
         }
 
-        if (isset($options['query']) && ! is_document($options['query'])) {
+        if (isset($options['query']) && !StaticFunctions::is_document($options['query'])) {
             throw InvalidArgumentException::expectedDocumentType('"query" option', $options['query']);
         }
 
@@ -175,7 +170,7 @@ final class FindAndModify implements Explainable
             throw InvalidArgumentException::invalidType('"session" option', $options['session'], Session::class);
         }
 
-        if (isset($options['sort']) && ! is_document($options['sort'])) {
+        if (isset($options['sort']) && !StaticFunctions::is_document($options['sort'])) {
             throw InvalidArgumentException::expectedDocumentType('"sort" option', $options['sort']);
         }
 
@@ -195,7 +190,7 @@ final class FindAndModify implements Explainable
             throw InvalidArgumentException::invalidType('"upsert" option', $options['upsert'], 'boolean');
         }
 
-        if (isset($options['let']) && ! is_document($options['let'])) {
+        if (isset($options['let']) && !StaticFunctions::is_document($options['let'])) {
             throw InvalidArgumentException::expectedDocumentType('"let" option', $options['let']);
         }
 
@@ -229,15 +224,15 @@ final class FindAndModify implements Explainable
     {
         /* Server versions >= 4.2.0 raise errors for unsupported update options.
          * For previous versions, the CRUD spec requires a client-side error. */
-        if (isset($this->options['hint']) && ! server_supports_feature($server, self::WIRE_VERSION_FOR_UNSUPPORTED_OPTION_SERVER_SIDE_ERROR)) {
+        if (isset($this->options['hint']) && !StaticFunctions::server_supports_feature($server, self::WIRE_VERSION_FOR_UNSUPPORTED_OPTION_SERVER_SIDE_ERROR)) {
             throw UnsupportedException::hintNotSupported();
         }
 
         /* CRUD spec requires a client-side error when using "hint" with an
          * unacknowledged write concern on an unsupported server. */
         if (
-            isset($this->options['writeConcern']) && ! is_write_concern_acknowledged($this->options['writeConcern']) &&
-            isset($this->options['hint']) && ! server_supports_feature($server, self::WIRE_VERSION_FOR_HINT)
+            isset($this->options['writeConcern']) && !StaticFunctions::is_write_concern_acknowledged($this->options['writeConcern']) &&
+            isset($this->options['hint']) && !StaticFunctions::server_supports_feature($server, self::WIRE_VERSION_FOR_HINT)
         ) {
             throw UnsupportedException::hintNotSupported();
         }
@@ -260,7 +255,7 @@ final class FindAndModify implements Explainable
         }
 
         if (isset($this->options['typeMap'])) {
-            $cursor->setTypeMap(create_field_path_type_map($this->options['typeMap'], 'value'));
+            $cursor->setTypeMap(StaticFunctions::create_field_path_type_map($this->options['typeMap'], 'value'));
         }
 
         $result = current($cursor->toArray());
@@ -314,7 +309,7 @@ final class FindAndModify implements Explainable
              * This also allows an empty pipeline expressed as a PackedArray or
              * Serializable to still encode as a BSON array, since the object
              * cast will have no effect. */
-            $cmd['update'] = is_pipeline($update) ? $update : (object) $update;
+            $cmd['update'] = StaticFunctions::is_pipeline($update) ? $update : (object) $update;
         }
 
         foreach (['arrayFilters', 'bypassDocumentValidation', 'comment', 'hint', 'maxTimeMS'] as $option) {

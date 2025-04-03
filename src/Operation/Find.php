@@ -28,13 +28,12 @@ use MongoDB\Driver\Session;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
 use MongoDB\Model\CodecCursor;
-
+use StaticFunctions;
 use function assert;
 use function is_array;
 use function is_bool;
 use function is_integer;
 use function is_string;
-use function MongoDB\is_document;
 
 /**
  * Operation for the find command.
@@ -132,7 +131,7 @@ final class Find implements Explainable
      */
     public function __construct(private string $databaseName, private string $collectionName, private array|object $filter, private array $options = [])
     {
-        if (! is_document($filter)) {
+        if (!StaticFunctions::is_document($filter)) {
             throw InvalidArgumentException::expectedDocumentType('$filter', $filter);
         }
 
@@ -152,7 +151,7 @@ final class Find implements Explainable
             throw InvalidArgumentException::invalidType('"codec" option', $this->options['codec'], DocumentCodec::class);
         }
 
-        if (isset($this->options['collation']) && ! is_document($this->options['collation'])) {
+        if (isset($this->options['collation']) && !StaticFunctions::is_document($this->options['collation'])) {
             throw InvalidArgumentException::expectedDocumentType('"collation" option', $this->options['collation']);
         }
 
@@ -170,7 +169,7 @@ final class Find implements Explainable
             }
         }
 
-        if (isset($this->options['hint']) && ! is_string($this->options['hint']) && ! is_document($this->options['hint'])) {
+        if (isset($this->options['hint']) && ! is_string($this->options['hint']) && !StaticFunctions::is_document($this->options['hint'])) {
             throw InvalidArgumentException::expectedDocumentOrStringType('"hint" option', $this->options['hint']);
         }
 
@@ -178,7 +177,7 @@ final class Find implements Explainable
             throw InvalidArgumentException::invalidType('"limit" option', $this->options['limit'], 'integer');
         }
 
-        if (isset($this->options['max']) && ! is_document($this->options['max'])) {
+        if (isset($this->options['max']) && !StaticFunctions::is_document($this->options['max'])) {
             throw InvalidArgumentException::expectedDocumentType('"max" option', $this->options['max']);
         }
 
@@ -190,7 +189,7 @@ final class Find implements Explainable
             throw InvalidArgumentException::invalidType('"maxTimeMS" option', $this->options['maxTimeMS'], 'integer');
         }
 
-        if (isset($this->options['min']) && ! is_document($this->options['min'])) {
+        if (isset($this->options['min']) && !StaticFunctions::is_document($this->options['min'])) {
             throw InvalidArgumentException::expectedDocumentType('"min" option', $this->options['min']);
         }
 
@@ -198,7 +197,7 @@ final class Find implements Explainable
             throw InvalidArgumentException::invalidType('"noCursorTimeout" option', $this->options['noCursorTimeout'], 'boolean');
         }
 
-        if (isset($this->options['projection']) && ! is_document($this->options['projection'])) {
+        if (isset($this->options['projection']) && !StaticFunctions::is_document($this->options['projection'])) {
             throw InvalidArgumentException::expectedDocumentType('"projection" option', $this->options['projection']);
         }
 
@@ -226,7 +225,7 @@ final class Find implements Explainable
             throw InvalidArgumentException::invalidType('"skip" option', $this->options['skip'], 'integer');
         }
 
-        if (isset($this->options['sort']) && ! is_document($this->options['sort'])) {
+        if (isset($this->options['sort']) && !StaticFunctions::is_document($this->options['sort'])) {
             throw InvalidArgumentException::expectedDocumentType('"sort" option', $this->options['sort']);
         }
 
@@ -234,7 +233,7 @@ final class Find implements Explainable
             throw InvalidArgumentException::invalidType('"typeMap" option', $this->options['typeMap'], 'array');
         }
 
-        if (isset($this->options['let']) && ! is_document($this->options['let'])) {
+        if (isset($this->options['let']) && !StaticFunctions::is_document($this->options['let'])) {
             throw InvalidArgumentException::expectedDocumentType('"let" option', $this->options['let']);
         }
 

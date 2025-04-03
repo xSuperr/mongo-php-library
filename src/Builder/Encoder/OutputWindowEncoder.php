@@ -11,11 +11,10 @@ use MongoDB\Builder\Type\WindowInterface;
 use MongoDB\Codec\EncodeIfSupported;
 use MongoDB\Codec\Encoder;
 use MongoDB\Exception\UnsupportedValueException;
+use StaticFunctions;
 use stdClass;
-
 use function array_key_first;
 use function get_debug_type;
-use function MongoDB\is_first_key_operator;
 use function sprintf;
 
 /**
@@ -43,7 +42,7 @@ final class OutputWindowEncoder implements Encoder
 
         // Transform the result into an stdClass if a document is provided
         if (! $value->operator instanceof WindowInterface) {
-            if (! is_first_key_operator($result)) {
+            if (!StaticFunctions::is_first_key_operator($result)) {
                 $firstKey = array_key_first((array) $result);
 
                 throw new LogicException(sprintf('Expected OutputWindow::$operator to be an operator. Got "%s"', $firstKey ?? 'null'));

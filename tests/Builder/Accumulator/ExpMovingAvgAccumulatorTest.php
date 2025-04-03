@@ -10,8 +10,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Builder\Type\Sort;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $expMovingAvg accumulator
@@ -23,10 +22,10 @@ class ExpMovingAvgAccumulatorTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::setWindowFields(
                 partitionBy: Expression::stringFieldPath('stock'),
-                sortBy: object(
+                sortBy: StaticFunctions::object(
                     date: Sort::Asc,
                 ),
-                output: object(
+                output: StaticFunctions::object(
                     expMovingAvgForStock: Accumulator::expMovingAvg(
                         input: Expression::numberFieldPath('price'),
                         alpha: 0.75,
@@ -43,10 +42,10 @@ class ExpMovingAvgAccumulatorTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::setWindowFields(
                 partitionBy: Expression::stringFieldPath('stock'),
-                sortBy: object(
+                sortBy: StaticFunctions::object(
                     date: Sort::Asc,
                 ),
-                output: object(
+                output: StaticFunctions::object(
                     expMovingAvgForStock: Accumulator::expMovingAvg(
                         input: Expression::numberFieldPath('price'),
                         N: 2,

@@ -29,14 +29,13 @@ use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\ResumeTokenException;
 use MongoDB\Exception\UnexpectedValueException;
-
+use StaticFunctions;
 use function assert;
 use function count;
 use function is_array;
 use function is_object;
 use function MongoDB\Driver\Monitoring\addSubscriber;
 use function MongoDB\Driver\Monitoring\removeSubscriber;
-use function MongoDB\is_document;
 
 /**
  * ChangeStreamIterator wraps a change stream's tailable cursor.
@@ -166,7 +165,7 @@ final class ChangeStreamIterator extends IteratorIterator implements CommandSubs
      */
     public function __construct(CursorInterface $cursor, int $firstBatchSize, array|object|null $initialResumeToken, private ?object $postBatchResumeToken = null)
     {
-        if (isset($initialResumeToken) && ! is_document($initialResumeToken)) {
+        if (isset($initialResumeToken) && !StaticFunctions::is_document($initialResumeToken)) {
             throw InvalidArgumentException::expectedDocumentType('$initialResumeToken', $initialResumeToken);
         }
 
@@ -224,7 +223,7 @@ final class ChangeStreamIterator extends IteratorIterator implements CommandSubs
      */
     private function extractResumeToken(array|object $document): array|object
     {
-        if (! is_document($document)) {
+        if (!StaticFunctions::is_document($document)) {
             throw InvalidArgumentException::expectedDocumentType('$document', $document);
         }
 

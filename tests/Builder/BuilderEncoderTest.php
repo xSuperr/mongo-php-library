@@ -22,9 +22,8 @@ use MongoDB\Codec\EncodeIfSupported;
 use MongoDB\Codec\Encoder;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-
+use StaticFunctions;
 use function array_merge;
-use function MongoDB\object;
 use function var_export;
 
 class BuilderEncoderTest extends TestCase
@@ -238,8 +237,8 @@ class BuilderEncoderTest extends TestCase
         $pipeline = new Pipeline(
             Stage::setWindowFields(
                 partitionBy: Expression::year(Expression::dateFieldPath('orderDate')),
-                sortBy: object(orderDate: Sort::Asc),
-                output: object(
+                sortBy: StaticFunctions::object(orderDate: Sort::Asc),
+                output: StaticFunctions::object(
                     cumulativeQuantityForYear: Accumulator::outputWindow(
                         Accumulator::sum(Expression::intFieldPath('quantity')),
                         documents: ['unbounded', 'current'],

@@ -25,11 +25,8 @@ use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
-
+use StaticFunctions;
 use function is_string;
-use function MongoDB\is_document;
-use function MongoDB\is_write_concern_acknowledged;
-use function MongoDB\server_supports_feature;
 
 /**
  * Operation for the delete command.
@@ -82,7 +79,7 @@ final class Delete implements Explainable
      */
     public function __construct(private string $databaseName, private string $collectionName, private array|object $filter, private int $limit, private array $options = [])
     {
-        if (! is_document($filter)) {
+        if (!StaticFunctions::is_document($filter)) {
             throw InvalidArgumentException::expectedDocumentType('$filter', $filter);
         }
 
@@ -90,11 +87,11 @@ final class Delete implements Explainable
             throw new InvalidArgumentException('$limit must be 0 or 1');
         }
 
-        if (isset($this->options['collation']) && ! is_document($this->options['collation'])) {
+        if (isset($this->options['collation']) && !StaticFunctions::is_document($this->options['collation'])) {
             throw InvalidArgumentException::expectedDocumentType('"collation" option', $this->options['collation']);
         }
 
-        if (isset($this->options['hint']) && ! is_string($this->options['hint']) && ! is_document($this->options['hint'])) {
+        if (isset($this->options['hint']) && ! is_string($this->options['hint']) && !StaticFunctions::is_document($this->options['hint'])) {
             throw InvalidArgumentException::expectedDocumentOrStringType('"hint" option', $this->options['hint']);
         }
 
@@ -106,7 +103,7 @@ final class Delete implements Explainable
             throw InvalidArgumentException::invalidType('"writeConcern" option', $this->options['writeConcern'], WriteConcern::class);
         }
 
-        if (isset($this->options['let']) && ! is_document($this->options['let'])) {
+        if (isset($this->options['let']) && !StaticFunctions::is_document($this->options['let'])) {
             throw InvalidArgumentException::expectedDocumentType('"let" option', $this->options['let']);
         }
 
@@ -126,8 +123,8 @@ final class Delete implements Explainable
         /* CRUD spec requires a client-side error when using "hint" with an
          * unacknowledged write concern on an unsupported server. */
         if (
-            isset($this->options['writeConcern']) && ! is_write_concern_acknowledged($this->options['writeConcern']) &&
-            isset($this->options['hint']) && ! server_supports_feature($server, self::WIRE_VERSION_FOR_HINT)
+            isset($this->options['writeConcern']) && !StaticFunctions::is_write_concern_acknowledged($this->options['writeConcern']) &&
+            isset($this->options['hint']) && !StaticFunctions::server_supports_feature($server, self::WIRE_VERSION_FOR_HINT)
         ) {
             throw UnsupportedException::hintNotSupported();
         }

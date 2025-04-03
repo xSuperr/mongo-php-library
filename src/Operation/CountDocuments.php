@@ -22,14 +22,13 @@ use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnexpectedValueException;
 use MongoDB\Exception\UnsupportedException;
-
+use StaticFunctions;
 use function array_intersect_key;
 use function count;
 use function current;
 use function is_float;
 use function is_integer;
 use function is_object;
-use function MongoDB\is_document;
 
 /**
  * Operation for obtaining an exact count of documents in a collection
@@ -82,7 +81,7 @@ final class CountDocuments
      */
     public function __construct(private string $databaseName, private string $collectionName, private array|object $filter, array $options = [])
     {
-        if (! is_document($filter)) {
+        if (!StaticFunctions::is_document($filter)) {
             throw InvalidArgumentException::expectedDocumentType('$filter', $filter);
         }
 

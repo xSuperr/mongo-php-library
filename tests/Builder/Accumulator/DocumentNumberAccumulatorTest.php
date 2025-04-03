@@ -10,8 +10,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Builder\Type\Sort;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $documentNumber accumulator
@@ -23,10 +22,10 @@ class DocumentNumberAccumulatorTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::setWindowFields(
                 partitionBy: Expression::stringFieldPath('state'),
-                sortBy: object(
+                sortBy: StaticFunctions::object(
                     quantity: Sort::Desc,
                 ),
-                output: object(
+                output: StaticFunctions::object(
                     documentNumberForState: Accumulator::documentNumber(),
                 ),
             ),

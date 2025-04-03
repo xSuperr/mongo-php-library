@@ -10,8 +10,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Query;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $facet stage
@@ -46,7 +45,7 @@ class FacetStageTest extends PipelineTestCase
                         groupBy: Expression::numberFieldPath('price'),
                         boundaries: [0, 150, 200, 300, 400],
                         default: 'Other',
-                        output: object(
+                        output: StaticFunctions::object(
                             count: Accumulator::sum(1),
                             titles: Accumulator::push(
                                 Expression::stringFieldPath('title'),

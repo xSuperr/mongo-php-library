@@ -8,8 +8,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Search;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test text search
@@ -42,7 +41,7 @@ class TextOperatorTest extends PipelineTestCase
                 Search::text(
                     path: 'title',
                     query: 'naw yark',
-                    fuzzy: object(),
+                    fuzzy: StaticFunctions::object(),
                 ),
             ),
             Stage::limit(10),
@@ -63,7 +62,7 @@ class TextOperatorTest extends PipelineTestCase
                 Search::text(
                     path: 'title',
                     query: 'naw yark',
-                    fuzzy: object(
+                    fuzzy: StaticFunctions::object(
                         maxEdits: 1,
                         maxExpansions: 100,
                     ),
@@ -87,7 +86,7 @@ class TextOperatorTest extends PipelineTestCase
                 Search::text(
                     path: 'title',
                     query: 'naw yark',
-                    fuzzy: object(
+                    fuzzy: StaticFunctions::object(
                         maxEdits: 1,
                         prefixLength: 2,
                     ),

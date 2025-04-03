@@ -26,10 +26,9 @@ use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
 use MongoDB\InsertManyResult;
-
+use StaticFunctions;
 use function array_is_list;
 use function is_bool;
-use function MongoDB\is_document;
 use function sprintf;
 
 /**
@@ -193,7 +192,7 @@ final class InsertMany
                 $document = $documents[$i] = $codec->encode($document);
             }
 
-            if (! is_document($document)) {
+            if (!StaticFunctions::is_document($document)) {
                 throw InvalidArgumentException::expectedDocumentType(sprintf('$documents[%d]', $i), $document);
             }
         }

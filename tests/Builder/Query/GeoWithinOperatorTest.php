@@ -8,8 +8,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Query;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $geoWithin query
@@ -24,9 +23,9 @@ class GeoWithinOperatorTest extends PipelineTestCase
                     Query::geometry(
                         type: 'Polygon',
                         coordinates: [[[-100, 60], [-100, 0], [-100, -60], [100, -60], [100, 60], [-100, 60]]],
-                        crs: object(
+                        crs: StaticFunctions::object(
                             type: 'name',
-                            properties: object(
+                            properties: StaticFunctions::object(
                                 name: 'urn:x-mongodb:crs:strictwinding:EPSG:4326',
                             ),
                         ),

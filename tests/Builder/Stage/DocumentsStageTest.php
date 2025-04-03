@@ -9,8 +9,7 @@ use MongoDB\Builder\Expression;
 use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $documents stage
@@ -21,9 +20,9 @@ class DocumentsStageTest extends PipelineTestCase
     {
         $pipeline = new Pipeline(
             Stage::documents([
-                object(x: 10),
-                object(x: 2),
-                object(x: 5),
+                StaticFunctions::object(x: 10),
+                StaticFunctions::object(x: 2),
+                StaticFunctions::object(x: 5),
             ]),
             Stage::bucketAuto(
                 groupBy: Expression::intFieldPath('x'),
@@ -44,8 +43,8 @@ class DocumentsStageTest extends PipelineTestCase
                 as: 'city_state',
                 pipeline: new Pipeline(
                     Stage::documents([
-                        Document::fromPHP(object(zip_id: 94301, name: 'Palo Alto, CA')),
-                        Document::fromPHP(object(zip_id: 10019, name: 'New York, NY')),
+                        Document::fromPHP(StaticFunctions::object(zip_id: 94301, name: 'Palo Alto, CA')),
+                        Document::fromPHP(StaticFunctions::object(zip_id: 10019, name: 'New York, NY')),
                     ]),
                 ),
             ),

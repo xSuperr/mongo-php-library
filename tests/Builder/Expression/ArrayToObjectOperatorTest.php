@@ -8,8 +8,7 @@ use MongoDB\Builder\Expression;
 use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $arrayToObject expression
@@ -42,7 +41,7 @@ class ArrayToObjectOperatorTest extends PipelineTestCase
                 instock: Expression::concatArrays(
                     Expression::arrayFieldPath('instock'),
                     [
-                        object(k: 'total', v: Expression::sum(
+                        StaticFunctions::object(k: 'total', v: Expression::sum(
                             Expression::fieldPath('instock.v'),
                         )),
                     ],

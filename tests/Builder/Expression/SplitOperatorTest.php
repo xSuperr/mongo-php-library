@@ -11,8 +11,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Builder\Type\Sort;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $split expression
@@ -36,7 +35,7 @@ class SplitOperatorTest extends PipelineTestCase
                 city_state: new Regex('[A-Z]{2}'),
             ),
             Stage::group(
-                _id: object(
+                _id: StaticFunctions::object(
                     state: Expression::stringFieldPath('city_state'),
                 ),
                 total_qty: Accumulator::sum(

@@ -11,8 +11,7 @@ use MongoDB\Builder\Stage;
 use MongoDB\Builder\Type\Sort;
 use MongoDB\Builder\Type\TimeUnit;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $integral accumulator
@@ -24,10 +23,10 @@ class IntegralAccumulatorTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::setWindowFields(
                 partitionBy: Expression::stringFieldPath('powerMeterID'),
-                sortBy: object(
+                sortBy: StaticFunctions::object(
                     timeStamp: Sort::Asc,
                 ),
-                output: object(
+                output: StaticFunctions::object(
                     powerMeterKilowattHours: Accumulator::outputWindow(
                         Accumulator::integral(
                             input: Expression::numberFieldPath('kilowatts'),

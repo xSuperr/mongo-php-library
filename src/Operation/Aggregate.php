@@ -30,15 +30,12 @@ use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnexpectedValueException;
 use MongoDB\Exception\UnsupportedException;
 use MongoDB\Model\CodecCursor;
+use StaticFunctions;
 use stdClass;
-
 use function is_array;
 use function is_bool;
 use function is_integer;
 use function is_string;
-use function MongoDB\is_document;
-use function MongoDB\is_last_pipeline_operator_write;
-use function MongoDB\is_pipeline;
 
 /**
  * Operation for the aggregate command.
@@ -117,7 +114,7 @@ final class Aggregate implements Explainable
      */
     public function __construct(private string $databaseName, private ?string $collectionName, private array $pipeline, private array $options = [])
     {
-        if (! is_pipeline($pipeline, true /* allowEmpty */)) {
+        if (!StaticFunctions::is_pipeline($pipeline, true /* allowEmpty */)) {
             throw new InvalidArgumentException('$pipeline is not a valid aggregation pipeline');
         }
 
@@ -137,7 +134,7 @@ final class Aggregate implements Explainable
             throw InvalidArgumentException::invalidType('"codec" option', $this->options['codec'], DocumentCodec::class);
         }
 
-        if (isset($this->options['collation']) && ! is_document($this->options['collation'])) {
+        if (isset($this->options['collation']) && !StaticFunctions::is_document($this->options['collation'])) {
             throw InvalidArgumentException::expectedDocumentType('"collation" option', $this->options['collation']);
         }
 
@@ -145,11 +142,11 @@ final class Aggregate implements Explainable
             throw InvalidArgumentException::invalidType('"explain" option', $this->options['explain'], 'boolean');
         }
 
-        if (isset($this->options['hint']) && ! is_string($this->options['hint']) && ! is_document($this->options['hint'])) {
+        if (isset($this->options['hint']) && ! is_string($this->options['hint']) && !StaticFunctions::is_document($this->options['hint'])) {
             throw InvalidArgumentException::expectedDocumentOrStringType('"hint" option', $this->options['hint']);
         }
 
-        if (isset($this->options['let']) && ! is_document($this->options['let'])) {
+        if (isset($this->options['let']) && !StaticFunctions::is_document($this->options['let'])) {
             throw InvalidArgumentException::expectedDocumentType('"let" option', $this->options['let']);
         }
 
@@ -197,7 +194,7 @@ final class Aggregate implements Explainable
             throw InvalidArgumentException::cannotCombineCodecAndTypeMap();
         }
 
-        $this->isWrite = is_last_pipeline_operator_write($pipeline) && ! ($this->options['explain'] ?? false);
+        $this->isWrite = StaticFunctions::is_last_pipeline_operator_write($pipeline) && ! ($this->options['explain'] ?? false);
 
         if ($this->isWrite) {
             /* Ignore batchSize for writes, since no documents are returned and

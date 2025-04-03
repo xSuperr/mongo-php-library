@@ -26,14 +26,12 @@ use MongoDB\Driver\Session;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnexpectedValueException;
 use MongoDB\Exception\UnsupportedException;
-
+use StaticFunctions;
 use function current;
 use function is_array;
 use function is_integer;
 use function is_object;
 use function is_string;
-use function MongoDB\create_field_path_type_map;
-use function MongoDB\is_document;
 
 /**
  * Operation for the distinct command.
@@ -80,15 +78,15 @@ final class Distinct implements Explainable
      */
     public function __construct(private string $databaseName, private string $collectionName, private string $fieldName, private array|object $filter = [], private array $options = [])
     {
-        if (! is_document($filter)) {
+        if (!StaticFunctions::is_document($filter)) {
             throw InvalidArgumentException::expectedDocumentType('$filter', $filter);
         }
 
-        if (isset($this->options['collation']) && ! is_document($this->options['collation'])) {
+        if (isset($this->options['collation']) && !StaticFunctions::is_document($this->options['collation'])) {
             throw InvalidArgumentException::expectedDocumentType('"collation" option', $this->options['collation']);
         }
 
-        if (isset($this->options['hint']) && ! is_string($this->options['hint']) && ! is_document($this->options['hint'])) {
+        if (isset($this->options['hint']) && ! is_string($this->options['hint']) && !StaticFunctions::is_document($this->options['hint'])) {
             throw InvalidArgumentException::expectedDocumentOrStringType('"hint" option', $this->options['hint']);
         }
 
@@ -134,7 +132,7 @@ final class Distinct implements Explainable
         $cursor = $server->executeReadCommand($this->databaseName, new Command($this->createCommandDocument()), $this->createOptions());
 
         if (isset($this->options['typeMap'])) {
-            $cursor->setTypeMap(create_field_path_type_map($this->options['typeMap'], 'values.$'));
+            $cursor->setTypeMap(StaticFunctions::create_field_path_type_map($this->options['typeMap'], 'values.$'));
         }
 
         $result = current($cursor->toArray());

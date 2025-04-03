@@ -22,8 +22,7 @@ use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
-
-use function MongoDB\is_document;
+use StaticFunctions;
 
 /**
  * Operation for the createIndexes command.
@@ -51,7 +50,7 @@ final class UpdateSearchIndex
             throw new InvalidArgumentException('Index name cannot be empty');
         }
 
-        if (! is_document($definition)) {
+        if (!StaticFunctions::is_document($definition)) {
             throw InvalidArgumentException::expectedDocumentType('$definition', $definition);
         }
 

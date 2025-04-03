@@ -21,12 +21,9 @@ use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
-
+use StaticFunctions;
 use function array_key_exists;
 use function is_integer;
-use function MongoDB\is_document;
-use function MongoDB\is_first_key_operator;
-use function MongoDB\is_pipeline;
 
 /**
  * Operation for updating a document with the findAndModify command.
@@ -106,15 +103,15 @@ final class FindOneAndUpdate implements Explainable
      */
     public function __construct(string $databaseName, string $collectionName, array|object $filter, array|object $update, array $options = [])
     {
-        if (! is_document($filter)) {
+        if (!StaticFunctions::is_document($filter)) {
             throw InvalidArgumentException::expectedDocumentType('$filter', $filter);
         }
 
-        if (! is_first_key_operator($update) && ! is_pipeline($update)) {
+        if (!StaticFunctions::is_first_key_operator($update) && !StaticFunctions::is_pipeline($update)) {
             throw new InvalidArgumentException('Expected update operator(s) or non-empty pipeline for $update');
         }
 
-        if (isset($options['projection']) && ! is_document($options['projection'])) {
+        if (isset($options['projection']) && !StaticFunctions::is_document($options['projection'])) {
             throw InvalidArgumentException::expectedDocumentType('"projection" option', $options['projection']);
         }
 

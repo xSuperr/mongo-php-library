@@ -28,7 +28,7 @@ use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
-
+use StaticFunctions;
 use function array_is_list;
 use function array_key_exists;
 use function count;
@@ -36,9 +36,6 @@ use function current;
 use function is_array;
 use function is_bool;
 use function key;
-use function MongoDB\is_document;
-use function MongoDB\is_first_key_operator;
-use function MongoDB\is_pipeline;
 use function sprintf;
 
 /**
@@ -174,7 +171,7 @@ final class BulkWrite
             throw InvalidArgumentException::invalidType('"writeConcern" option', $options['writeConcern'], WriteConcern::class);
         }
 
-        if (isset($options['let']) && ! is_document($options['let'])) {
+        if (isset($options['let']) && !StaticFunctions::is_document($options['let'])) {
             throw InvalidArgumentException::expectedDocumentType('"let" option', $options['let']);
         }
 
@@ -297,7 +294,7 @@ final class BulkWrite
                 throw new InvalidArgumentException(sprintf('Missing first argument for $operations[%d]["%s"]', $i, $type));
             }
 
-            if (! is_document($args[0])) {
+            if (!StaticFunctions::is_document($args[0])) {
                 throw InvalidArgumentException::expectedDocumentType(sprintf('$operations[%d]["%s"][0]', $i, $type), $args[0]);
             }
 
@@ -325,7 +322,7 @@ final class BulkWrite
 
                     $args[1]['limit'] = ($type === self::DELETE_ONE ? 1 : 0);
 
-                    if (isset($args[1]['collation']) && ! is_document($args[1]['collation'])) {
+                    if (isset($args[1]['collation']) && !StaticFunctions::is_document($args[1]['collation'])) {
                         throw InvalidArgumentException::expectedDocumentType(sprintf('$operations[%d]["%s"][1]["collation"]', $i, $type), $args[1]['collation']);
                     }
 
@@ -344,7 +341,7 @@ final class BulkWrite
                         $operations[$i][$type][1] = $codec->encode($args[1]);
                     }
 
-                    if (! is_document($args[1])) {
+                    if (!StaticFunctions::is_document($args[1])) {
                         throw InvalidArgumentException::expectedDocumentType(sprintf('$operations[%d]["%s"][1]', $i, $type), $args[1]);
                     }
 
@@ -353,11 +350,11 @@ final class BulkWrite
                         $args[1] = (object) $args[1];
                     }
 
-                    if (is_first_key_operator($args[1])) {
+                    if (StaticFunctions::is_first_key_operator($args[1])) {
                         throw new InvalidArgumentException(sprintf('First key in $operations[%d]["%s"][1] is an update operator', $i, $type));
                     }
 
-                    if (is_pipeline($args[1], true /* allowEmpty */)) {
+                    if (StaticFunctions::is_pipeline($args[1], true /* allowEmpty */)) {
                         throw new InvalidArgumentException(sprintf('$operations[%d]["%s"][1] is an update pipeline', $i, $type));
                     }
 
@@ -372,11 +369,11 @@ final class BulkWrite
                     $args[2]['multi'] = false;
                     $args[2] += ['upsert' => false];
 
-                    if (isset($args[2]['collation']) && ! is_document($args[2]['collation'])) {
+                    if (isset($args[2]['collation']) && !StaticFunctions::is_document($args[2]['collation'])) {
                         throw InvalidArgumentException::expectedDocumentType(sprintf('$operations[%d]["%s"][2]["collation"]', $i, $type), $args[2]['collation']);
                     }
 
-                    if (isset($args[2]['sort']) && ! is_document($args[2]['sort'])) {
+                    if (isset($args[2]['sort']) && !StaticFunctions::is_document($args[2]['sort'])) {
                         throw InvalidArgumentException::expectedDocumentType(sprintf('$operations[%d]["%s"][2]["sort"]', $i, $type), $args[2]['sort']);
                     }
 
@@ -398,7 +395,7 @@ final class BulkWrite
 
                     $operations[$i][$type][1] = $args[1] = $builderEncoder->encodeIfSupported($args[1]);
 
-                    if ((! is_document($args[1]) || ! is_first_key_operator($args[1])) && ! is_pipeline($args[1])) {
+                    if ((!StaticFunctions::is_document($args[1]) || !StaticFunctions::is_first_key_operator($args[1])) && !StaticFunctions::is_pipeline($args[1])) {
                         throw new InvalidArgumentException(sprintf('Expected update operator(s) or non-empty pipeline for $operations[%d]["%s"][1]', $i, $type));
                     }
 
@@ -417,11 +414,11 @@ final class BulkWrite
                         throw InvalidArgumentException::invalidType(sprintf('$operations[%d]["%s"][2]["arrayFilters"]', $i, $type), $args[2]['arrayFilters'], 'array');
                     }
 
-                    if (isset($args[2]['collation']) && ! is_document($args[2]['collation'])) {
+                    if (isset($args[2]['collation']) && !StaticFunctions::is_document($args[2]['collation'])) {
                         throw InvalidArgumentException::expectedDocumentType(sprintf('$operations[%d]["%s"][2]["collation"]', $i, $type), $args[2]['collation']);
                     }
 
-                    if (isset($args[2]['sort']) && ! is_document($args[2]['sort'])) {
+                    if (isset($args[2]['sort']) && !StaticFunctions::is_document($args[2]['sort'])) {
                         throw InvalidArgumentException::expectedDocumentType(sprintf('$operations[%d]["%s"][2]["sort"]', $i, $type), $args[2]['sort']);
                     }
 

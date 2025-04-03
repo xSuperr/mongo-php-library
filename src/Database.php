@@ -50,9 +50,9 @@ use MongoDB\Operation\ListCollections;
 use MongoDB\Operation\ModifyCollection;
 use MongoDB\Operation\RenameCollection;
 use MongoDB\Operation\Watch;
+use StaticFunctions;
 use stdClass;
 use Throwable;
-
 use function is_array;
 use function strlen;
 
@@ -197,21 +197,21 @@ class Database
      */
     public function aggregate(array|Pipeline $pipeline, array $options = []): CursorInterface
     {
-        if (is_array($pipeline) && is_builder_pipeline($pipeline)) {
+        if (is_array($pipeline) && StaticFunctions::is_builder_pipeline($pipeline)) {
             $pipeline = new Pipeline(...$pipeline);
         }
 
         $pipeline = $this->builderEncoder->encodeIfSupported($pipeline);
 
-        $hasWriteStage = is_last_pipeline_operator_write($pipeline);
+        $hasWriteStage = StaticFunctions::is_last_pipeline_operator_write($pipeline);
 
-        if (! isset($options['readPreference']) && ! is_in_transaction($options)) {
+        if (! isset($options['readPreference']) && !StaticFunctions::is_in_transaction($options)) {
             $options['readPreference'] = $this->readPreference;
         }
 
         $server = $hasWriteStage
-            ? select_server_for_aggregate_write_stage($this->manager, $options)
-            : select_server($this->manager, $options);
+            ? StaticFunctions::select_server_for_aggregate_write_stage($this->manager, $options)
+            : StaticFunctions::select_server($this->manager, $options);
 
         /* MongoDB 4.2 and later supports a read concern when an $out stage is
          * being used, but earlier versions do not.
@@ -220,8 +220,8 @@ class Database
          */
         if (
             ! isset($options['readConcern']) &&
-            ! is_in_transaction($options) &&
-            ( ! $hasWriteStage || server_supports_feature($server, self::WIRE_VERSION_FOR_READ_CONCERN_WITH_WRITE_STAGE))
+            !StaticFunctions::is_in_transaction($options) &&
+            ( ! $hasWriteStage || StaticFunctions::server_supports_feature($server, self::WIRE_VERSION_FOR_READ_CONCERN_WITH_WRITE_STAGE))
         ) {
             $options['readConcern'] = $this->readConcern;
         }
@@ -230,7 +230,7 @@ class Database
             $options['typeMap'] = $this->typeMap;
         }
 
-        if ($hasWriteStage && ! isset($options['writeConcern']) && ! is_in_transaction($options)) {
+        if ($hasWriteStage && ! isset($options['writeConcern']) && !StaticFunctions::is_in_transaction($options)) {
             $options['writeConcern'] = $this->writeConcern;
         }
 
@@ -255,7 +255,7 @@ class Database
         }
 
         $operation = new DatabaseCommand($this->databaseName, $command, $options);
-        $server = select_server($this->manager, $options);
+        $server = StaticFunctions::select_server($this->manager, $options);
 
         return $operation->execute($server);
     }
@@ -276,19 +276,19 @@ class Database
      */
     public function createCollection(string $collectionName, array $options = []): void
     {
-        if (! isset($options['writeConcern']) && ! is_in_transaction($options)) {
+        if (! isset($options['writeConcern']) && !StaticFunctions::is_in_transaction($options)) {
             $options['writeConcern'] = $this->writeConcern;
         }
 
         if (! isset($options['encryptedFields'])) {
-            $options['encryptedFields'] = get_encrypted_fields_from_driver($this->databaseName, $collectionName, $this->manager);
+            $options['encryptedFields'] = StaticFunctions::get_encrypted_fields_from_driver($this->databaseName, $collectionName, $this->manager);
         }
 
         $operation = isset($options['encryptedFields'])
             ? new CreateEncryptedCollection($this->databaseName, $collectionName, $options)
             : new CreateCollection($this->databaseName, $collectionName, $options);
 
-        $server = select_server_for_write($this->manager, $options);
+        $server = StaticFunctions::select_server_for_write($this->manager, $options);
 
         $operation->execute($server);
     }
@@ -315,12 +315,12 @@ class Database
      */
     public function createEncryptedCollection(string $collectionName, ClientEncryption $clientEncryption, string $kmsProvider, ?array $masterKey, array $options): array
     {
-        if (! isset($options['writeConcern']) && ! is_in_transaction($options)) {
+        if (! isset($options['writeConcern']) && !StaticFunctions::is_in_transaction($options)) {
             $options['writeConcern'] = $this->writeConcern;
         }
 
         $operation = new CreateEncryptedCollection($this->databaseName, $collectionName, $options);
-        $server = select_server_for_write($this->manager, $options);
+        $server = StaticFunctions::select_server_for_write($this->manager, $options);
 
         try {
             $encryptedFields = $operation->createDataKeys($clientEncryption, $kmsProvider, $masterKey);
@@ -343,9 +343,9 @@ class Database
      */
     public function drop(array $options = []): void
     {
-        $server = select_server_for_write($this->manager, $options);
+        $server = StaticFunctions::select_server_for_write($this->manager, $options);
 
-        if (! isset($options['writeConcern']) && ! is_in_transaction($options)) {
+        if (! isset($options['writeConcern']) && !StaticFunctions::is_in_transaction($options)) {
             $options['writeConcern'] = $this->writeConcern;
         }
 
@@ -366,15 +366,15 @@ class Database
      */
     public function dropCollection(string $collectionName, array $options = []): void
     {
-        $server = select_server_for_write($this->manager, $options);
+        $server = StaticFunctions::select_server_for_write($this->manager, $options);
 
-        if (! isset($options['writeConcern']) && ! is_in_transaction($options)) {
+        if (! isset($options['writeConcern']) && !StaticFunctions::is_in_transaction($options)) {
             $options['writeConcern'] = $this->writeConcern;
         }
 
         if (! isset($options['encryptedFields'])) {
-            $options['encryptedFields'] = get_encrypted_fields_from_driver($this->databaseName, $collectionName, $this->manager)
-                ?? get_encrypted_fields_from_server($this->databaseName, $collectionName, $this->manager, $server);
+            $options['encryptedFields'] = StaticFunctions::get_encrypted_fields_from_driver($this->databaseName, $collectionName, $this->manager)
+                ?? StaticFunctions::get_encrypted_fields_from_server($this->databaseName, $collectionName, $this->manager, $server);
         }
 
         $operation = isset($options['encryptedFields'])
@@ -469,7 +469,7 @@ class Database
     public function listCollectionNames(array $options = []): Iterator
     {
         $operation = new ListCollectionNames($this->databaseName, $options);
-        $server = select_server($this->manager, $options);
+        $server = StaticFunctions::select_server($this->manager, $options);
 
         return $operation->execute($server);
     }
@@ -485,7 +485,7 @@ class Database
     public function listCollections(array $options = []): Iterator
     {
         $operation = new ListCollections($this->databaseName, $options);
-        $server = select_server($this->manager, $options);
+        $server = StaticFunctions::select_server($this->manager, $options);
 
         return $operation->execute($server);
     }
@@ -506,9 +506,9 @@ class Database
             $options['typeMap'] = $this->typeMap;
         }
 
-        $server = select_server_for_write($this->manager, $options);
+        $server = StaticFunctions::select_server_for_write($this->manager, $options);
 
-        if (! isset($options['writeConcern']) && ! is_in_transaction($options)) {
+        if (! isset($options['writeConcern']) && !StaticFunctions::is_in_transaction($options)) {
             $options['writeConcern'] = $this->writeConcern;
         }
 
@@ -535,9 +535,9 @@ class Database
             $toDatabaseName = $this->databaseName;
         }
 
-        $server = select_server_for_write($this->manager, $options);
+        $server = StaticFunctions::select_server_for_write($this->manager, $options);
 
-        if (! isset($options['writeConcern']) && ! is_in_transaction($options)) {
+        if (! isset($options['writeConcern']) && !StaticFunctions::is_in_transaction($options)) {
             $options['writeConcern'] = $this->writeConcern;
         }
 
@@ -588,19 +588,19 @@ class Database
      */
     public function watch(array|Pipeline $pipeline = [], array $options = []): ChangeStream
     {
-        if (is_array($pipeline) && is_builder_pipeline($pipeline)) {
+        if (is_array($pipeline) && StaticFunctions::is_builder_pipeline($pipeline)) {
             $pipeline = new Pipeline(...$pipeline);
         }
 
         $pipeline = $this->builderEncoder->encodeIfSupported($pipeline);
 
-        if (! isset($options['readPreference']) && ! is_in_transaction($options)) {
+        if (! isset($options['readPreference']) && !StaticFunctions::is_in_transaction($options)) {
             $options['readPreference'] = $this->readPreference;
         }
 
-        $server = select_server($this->manager, $options);
+        $server = StaticFunctions::select_server($this->manager, $options);
 
-        if (! isset($options['readConcern']) && ! is_in_transaction($options)) {
+        if (! isset($options['readConcern']) && !StaticFunctions::is_in_transaction($options)) {
             $options['readConcern'] = $this->readConcern;
         }
 

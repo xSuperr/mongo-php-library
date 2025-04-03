@@ -8,8 +8,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Search;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test geoShape search
@@ -22,7 +21,7 @@ class GeoShapeOperatorTest extends PipelineTestCase
             Stage::search(
                 Search::geoShape(
                     relation: 'disjoint',
-                    geometry: object(
+                    geometry: StaticFunctions::object(
                         type: 'Polygon',
                         coordinates: [
                             [
@@ -66,7 +65,7 @@ class GeoShapeOperatorTest extends PipelineTestCase
             Stage::search(
                 Search::geoShape(
                     relation: 'intersects',
-                    geometry: object(
+                    geometry: StaticFunctions::object(
                         type: 'MultiPolygon',
                         coordinates: [
                             [
@@ -148,7 +147,7 @@ class GeoShapeOperatorTest extends PipelineTestCase
             Stage::search(
                 Search::geoShape(
                     relation: 'within',
-                    geometry: object(
+                    geometry: StaticFunctions::object(
                         type: 'Polygon',
                         coordinates: [
                             [

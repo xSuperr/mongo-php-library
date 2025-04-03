@@ -11,8 +11,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Query;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $merge stage
@@ -43,7 +42,7 @@ class MergeStageTest extends PipelineTestCase
     {
         $pipeline = new Pipeline(
             Stage::group(
-                _id: object(
+                _id: StaticFunctions::object(
                     fiscal_year: Expression::stringFieldPath('fiscal_year'),
                     dept: Expression::stringFieldPath('dept'),
                 ),
@@ -52,7 +51,7 @@ class MergeStageTest extends PipelineTestCase
                 ),
             ),
             Stage::merge(
-                into: object(
+                into: StaticFunctions::object(
                     db: 'reporting',
                     coll: 'budgets',
                 ),
@@ -72,7 +71,7 @@ class MergeStageTest extends PipelineTestCase
                 fiscal_year: Query::gte(2019),
             ),
             Stage::group(
-                _id: object(
+                _id: StaticFunctions::object(
                     fiscal_year: Expression::stringFieldPath('fiscal_year'),
                     dept: Expression::stringFieldPath('dept'),
                 ),
@@ -81,7 +80,7 @@ class MergeStageTest extends PipelineTestCase
                 ),
             ),
             Stage::merge(
-                into: object(
+                into: StaticFunctions::object(
                     db: 'reporting',
                     coll: 'budgets',
                 ),
@@ -101,7 +100,7 @@ class MergeStageTest extends PipelineTestCase
                 fiscal_year: 2019,
             ),
             Stage::group(
-                _id: object(
+                _id: StaticFunctions::object(
                     fiscal_year: Expression::stringFieldPath('fiscal_year'),
                     dept: Expression::stringFieldPath('dept'),
                 ),
@@ -116,7 +115,7 @@ class MergeStageTest extends PipelineTestCase
                 employees: 1,
             ),
             Stage::merge(
-                into: object(
+                into: StaticFunctions::object(
                     db: 'reporting',
                     coll: 'orgArchive',
                 ),
@@ -172,7 +171,7 @@ class MergeStageTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::merge(
                 into: 'cakeSales',
-                let: object(
+                let: StaticFunctions::object(
                     year: '2020',
                 ),
                 whenMatched: new Pipeline(

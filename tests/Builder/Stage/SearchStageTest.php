@@ -13,8 +13,7 @@ use MongoDB\Builder\Search;
 use MongoDB\Builder\Stage;
 use MongoDB\Builder\Variable;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $search stage
@@ -30,7 +29,7 @@ class SearchStageTest extends PipelineTestCase
                     origin: new UTCDateTime(new DateTime('2011-09-01T00:00:00.000+00:00')),
                     pivot: 7776000000,
                 ),
-                count: object(type: 'total'),
+                count: StaticFunctions::object(type: 'total'),
             ),
             Stage::project(
                 meta: Variable::searchMeta(),
@@ -52,7 +51,7 @@ class SearchStageTest extends PipelineTestCase
                     gt: new UTCDateTime(new DateTime('2010-01-01')),
                     lt: new UTCDateTime(new DateTime('2015-01-01')),
                 ),
-                sort: object(
+                sort: StaticFunctions::object(
                     released: -1,
                 ),
             ),
@@ -121,7 +120,7 @@ class SearchStageTest extends PipelineTestCase
                     query: 'war',
                 ),
                 searchAfter: 'CMtJGgYQuq+ngwgaCSkAjBYH7AAAAA==',
-                sort: object(
+                sort: StaticFunctions::object(
                     score: ['$meta' => 'searchScore'],
                     released: 1,
                 ),
@@ -140,7 +139,7 @@ class SearchStageTest extends PipelineTestCase
                     query: 'war',
                 ),
                 searchBefore: 'CJ6kARoGELqvp4MIGgkpACDA3U8BAAA=',
-                sort: object(
+                sort: StaticFunctions::object(
                     score: ['$meta' => 'searchScore'],
                     released: 1,
                 ),
@@ -185,7 +184,7 @@ class SearchStageTest extends PipelineTestCase
                     path: 'title',
                     query: 'story',
                 ),
-                sort: object(
+                sort: StaticFunctions::object(
                     score: [
                         '$meta' => 'searchScore',
                         'order' => 1,
@@ -211,7 +210,7 @@ class SearchStageTest extends PipelineTestCase
                     query: 'summer',
                     path: 'title',
                 ),
-                tracking: object(searchTerms: 'summer'),
+                tracking: StaticFunctions::object(searchTerms: 'summer'),
             ),
             Stage::limit(5),
             Stage::project(

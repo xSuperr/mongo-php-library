@@ -22,7 +22,6 @@ use Iterator;
 use MongoDB\BSON\Document;
 use MongoDB\BSON\PackedArray;
 use MongoDB\Builder\BuilderEncoder;
-use MongoDB\Driver\Session;
 use MongoDB\Builder\Pipeline;
 use MongoDB\Codec\DocumentCodec;
 use MongoDB\Codec\Encoder;
@@ -31,6 +30,7 @@ use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Manager;
 use MongoDB\Driver\ReadConcern;
 use MongoDB\Driver\ReadPreference;
+use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnexpectedValueException;
@@ -69,8 +69,8 @@ use MongoDB\Operation\UpdateMany;
 use MongoDB\Operation\UpdateOne;
 use MongoDB\Operation\UpdateSearchIndex;
 use MongoDB\Operation\Watch;
+use StaticFunctions;
 use stdClass;
-
 use function array_diff_key;
 use function array_intersect_key;
 use function array_key_exists;
@@ -219,24 +219,24 @@ class Collection
      */
     public function aggregate(array|Pipeline $pipeline, array $options = []): CursorInterface
     {
-        if (is_array($pipeline) && is_builder_pipeline($pipeline)) {
+        if (is_array($pipeline) && StaticFunctions::is_builder_pipeline($pipeline)) {
             $pipeline = new Pipeline(...$pipeline);
         }
 
         $pipeline = $this->builderEncoder->encodeIfSupported($pipeline);
 
-        $hasWriteStage = is_last_pipeline_operator_write($pipeline);
+        $hasWriteStage = StaticFunctions::is_last_pipeline_operator_write($pipeline);
 
         $options = $this->inheritReadPreference($options);
 
         $server = $hasWriteStage
-            ? select_server_for_aggregate_write_stage($this->manager, $options)
-            : select_server($this->manager, $options);
+            ? StaticFunctions::select_server_for_aggregate_write_stage($this->manager, $options)
+            : StaticFunctions::select_server($this->manager, $options);
 
         /* MongoDB 4.2 and later supports a read concern when an $out stage is
          * being used, but earlier versions do not.
          */
-        if (! $hasWriteStage || server_supports_feature($server, self::WIRE_VERSION_FOR_READ_CONCERN_WITH_WRITE_STAGE)) {
+        if (! $hasWriteStage || StaticFunctions::server_supports_feature($server, self::WIRE_VERSION_FOR_READ_CONCERN_WITH_WRITE_STAGE)) {
             $options = $this->inheritReadConcern($options);
         }
 
@@ -269,7 +269,7 @@ class Collection
 
         $operation = new BulkWrite($this->databaseName, $this->collectionName, $operations, $options);
 
-        return $operation->execute(select_server_for_write($this->manager, $options));
+        return $operation->execute(StaticFunctions::select_server_for_write($this->manager, $options));
     }
 
     /**
@@ -292,7 +292,7 @@ class Collection
 
         $operation = new Count($this->databaseName, $this->collectionName, $filter, $options);
 
-        return $operation->execute(select_server($this->manager, $options));
+        return $operation->execute(StaticFunctions::select_server($this->manager, $options));
     }
 
     /**
@@ -313,7 +313,7 @@ class Collection
 
         $operation = new CountDocuments($this->databaseName, $this->collectionName, $filter, $options);
 
-        return $operation->execute(select_server($this->manager, $options));
+        return $operation->execute(StaticFunctions::select_server($this->manager, $options));
     }
 
     /**
@@ -371,7 +371,7 @@ class Collection
 
         $operation = new CreateIndexes($this->databaseName, $this->collectionName, $indexes, $options);
 
-        return $operation->execute(select_server_for_write($this->manager, $options));
+        return $operation->execute(StaticFunctions::select_server_for_write($this->manager, $options));
     }
 
     /**
@@ -427,7 +427,7 @@ class Collection
     public function createSearchIndexes(array $indexes, array $options = []): array
     {
         $operation = new CreateSearchIndexes($this->databaseName, $this->collectionName, $indexes, $options);
-        $server = select_server_for_write($this->manager, $options);
+        $server = StaticFunctions::select_server_for_write($this->manager, $options);
 
         return $operation->execute($server);
     }
@@ -450,7 +450,7 @@ class Collection
 
         $operation = new DeleteMany($this->databaseName, $this->collectionName, $filter, $options);
 
-        return $operation->execute(select_server_for_write($this->manager, $options));
+        return $operation->execute(StaticFunctions::select_server_for_write($this->manager, $options));
     }
 
     /**
@@ -471,7 +471,7 @@ class Collection
 
         $operation = new DeleteOne($this->databaseName, $this->collectionName, $filter, $options);
 
-        return $operation->execute(select_server_for_write($this->manager, $options));
+        return $operation->execute(StaticFunctions::select_server_for_write($this->manager, $options));
     }
 
     /**
@@ -494,7 +494,7 @@ class Collection
 
         $operation = new Distinct($this->databaseName, $this->collectionName, $fieldName, $filter, $options);
 
-        return $operation->execute(select_server($this->manager, $options));
+        return $operation->execute(StaticFunctions::select_server($this->manager, $options));
     }
 
     /**
@@ -510,11 +510,11 @@ class Collection
     {
         $options = $this->inheritWriteOptions($options);
 
-        $server = select_server_for_write($this->manager, $options);
+        $server = StaticFunctions::select_server_for_write($this->manager, $options);
 
         if (! isset($options['encryptedFields'])) {
-            $options['encryptedFields'] = get_encrypted_fields_from_driver($this->databaseName, $this->collectionName, $this->manager)
-                ?? get_encrypted_fields_from_server($this->databaseName, $this->collectionName, $this->manager, $server);
+            $options['encryptedFields'] = StaticFunctions::get_encrypted_fields_from_driver($this->databaseName, $this->collectionName, $this->manager)
+                ?? StaticFunctions::get_encrypted_fields_from_server($this->databaseName, $this->collectionName, $this->manager, $server);
         }
 
         $operation = isset($options['encryptedFields'])
@@ -546,7 +546,7 @@ class Collection
 
         $operation = new DropIndexes($this->databaseName, $this->collectionName, $indexName, $options);
 
-        $operation->execute(select_server_for_write($this->manager, $options));
+        $operation->execute(StaticFunctions::select_server_for_write($this->manager, $options));
     }
 
     /**
@@ -564,7 +564,7 @@ class Collection
 
         $operation = new DropIndexes($this->databaseName, $this->collectionName, '*', $options);
 
-        $operation->execute(select_server_for_write($this->manager, $options));
+        $operation->execute(StaticFunctions::select_server_for_write($this->manager, $options));
     }
 
     /**
@@ -580,7 +580,7 @@ class Collection
     public function dropSearchIndex(string $name, array $options = []): void
     {
         $operation = new DropSearchIndex($this->databaseName, $this->collectionName, $name);
-        $server = select_server_for_write($this->manager, $options);
+        $server = StaticFunctions::select_server_for_write($this->manager, $options);
 
         $operation->execute($server);
     }
@@ -601,7 +601,7 @@ class Collection
 
         $operation = new EstimatedDocumentCount($this->databaseName, $this->collectionName, $options);
 
-        return $operation->execute(select_server($this->manager, $options));
+        return $operation->execute(StaticFunctions::select_server($this->manager, $options));
     }
 
     /**
@@ -622,7 +622,7 @@ class Collection
 
         $operation = new Explain($this->databaseName, $explainable, $options);
 
-        return $operation->execute(select_server($this->manager, $options));
+        return $operation->execute(StaticFunctions::select_server($this->manager, $options));
     }
 
     /**
@@ -644,7 +644,7 @@ class Collection
 
         $operation = new Find($this->databaseName, $this->collectionName, $filter, $options);
 
-        return $operation->execute(select_server($this->manager, $options));
+        return $operation->execute(StaticFunctions::select_server($this->manager, $options));
     }
 
     /**
@@ -666,7 +666,7 @@ class Collection
 
         $operation = new FindOne($this->databaseName, $this->collectionName, $filter, $options);
 
-        return $operation->execute(select_server($this->manager, $options));
+        return $operation->execute(StaticFunctions::select_server($this->manager, $options));
     }
 
     /**
@@ -691,7 +691,7 @@ class Collection
 
         $operation = new FindOneAndDelete($this->databaseName, $this->collectionName, $filter, $options);
 
-        return $operation->execute(select_server_for_write($this->manager, $options));
+        return $operation->execute(StaticFunctions::select_server_for_write($this->manager, $options));
     }
 
     /**
@@ -721,7 +721,7 @@ class Collection
 
         $operation = new FindOneAndReplace($this->databaseName, $this->collectionName, $filter, $replacement, $options);
 
-        return $operation->execute(select_server_for_write($this->manager, $options));
+        return $operation->execute(StaticFunctions::select_server_for_write($this->manager, $options));
     }
 
     /**
@@ -751,7 +751,7 @@ class Collection
 
         $operation = new FindOneAndUpdate($this->databaseName, $this->collectionName, $filter, $update, $options);
 
-        return $operation->execute(select_server_for_write($this->manager, $options));
+        return $operation->execute(StaticFunctions::select_server_for_write($this->manager, $options));
     }
 
     /**
@@ -841,7 +841,7 @@ class Collection
 
         $operation = new InsertMany($this->databaseName, $this->collectionName, $documents, $options);
 
-        return $operation->execute(select_server_for_write($this->manager, $options));
+        return $operation->execute(StaticFunctions::select_server_for_write($this->manager, $options));
     }
 
     /**
@@ -861,7 +861,7 @@ class Collection
 
         $operation = new InsertOne($this->databaseName, $this->collectionName, $document, $options);
 
-        return $operation->execute(select_server_for_write($this->manager, $options));
+        return $operation->execute(StaticFunctions::select_server_for_write($this->manager, $options));
     }
 
     /**
@@ -876,7 +876,7 @@ class Collection
     {
         $operation = new ListIndexes($this->databaseName, $this->collectionName, $options);
 
-        return $operation->execute(select_server($this->manager, $options));
+        return $operation->execute(StaticFunctions::select_server($this->manager, $options));
     }
 
     /**
@@ -894,7 +894,7 @@ class Collection
         $options = $this->inheritTypeMap($options);
 
         $operation = new ListSearchIndexes($this->databaseName, $this->collectionName, $options);
-        $server = select_server($this->manager, $options);
+        $server = StaticFunctions::select_server($this->manager, $options);
 
         return $operation->execute($server);
     }
@@ -920,7 +920,7 @@ class Collection
 
         $operation = new RenameCollection($this->databaseName, $this->collectionName, $toDatabaseName, $toCollectionName, $options);
 
-        $operation->execute(select_server_for_write($this->manager, $options));
+        $operation->execute(StaticFunctions::select_server_for_write($this->manager, $options));
     }
 
     /**
@@ -943,7 +943,7 @@ class Collection
 
         $operation = new ReplaceOne($this->databaseName, $this->collectionName, $filter, $replacement, $options);
 
-        return $operation->execute(select_server_for_write($this->manager, $options));
+        return $operation->execute(StaticFunctions::select_server_for_write($this->manager, $options));
     }
 
     /**
@@ -966,7 +966,7 @@ class Collection
 
         $operation = new UpdateMany($this->databaseName, $this->collectionName, $filter, $update, $options);
 
-        return $operation->execute(select_server_for_write($this->manager, $options));
+        return $operation->execute(StaticFunctions::select_server_for_write($this->manager, $options));
     }
 
     /**
@@ -989,7 +989,7 @@ class Collection
 
         $operation = new UpdateOne($this->databaseName, $this->collectionName, $filter, $update, $options);
 
-        return $operation->execute(select_server_for_write($this->manager, $options));
+        return $operation->execute(StaticFunctions::select_server_for_write($this->manager, $options));
     }
 
     /**
@@ -1006,7 +1006,7 @@ class Collection
     public function updateSearchIndex(string $name, array|object $definition, array $options = []): void
     {
         $operation = new UpdateSearchIndex($this->databaseName, $this->collectionName, $name, $definition, $options);
-        $server = select_server_for_write($this->manager, $options);
+        $server = StaticFunctions::select_server_for_write($this->manager, $options);
 
         $operation->execute($server);
     }
@@ -1021,7 +1021,7 @@ class Collection
      */
     public function watch(array|Pipeline $pipeline = [], array $options = []): ChangeStream
     {
-        if (is_array($pipeline) && is_builder_pipeline($pipeline)) {
+        if (is_array($pipeline) && StaticFunctions::is_builder_pipeline($pipeline)) {
             $pipeline = new Pipeline(...$pipeline);
         }
 
@@ -1032,7 +1032,7 @@ class Collection
 
         $operation = new Watch($this->manager, $this->databaseName, $this->collectionName, $pipeline, $options);
 
-        return $operation->execute(select_server($this->manager, $options));
+        return $operation->execute(StaticFunctions::select_server($this->manager, $options));
     }
 
     /**
@@ -1098,7 +1098,7 @@ class Collection
     private function inheritReadConcern(array $options): array
     {
         // ReadConcern and ReadPreference may not change within a transaction
-        if (! isset($options['readConcern']) && ! $this->is_in_transaction($options)) {
+        if (! isset($options['readConcern']) && ! StaticFunctions::is_in_transaction($options)) {
             $options['readConcern'] = $this->readConcern;
         }
 
@@ -1115,7 +1115,7 @@ class Collection
     private function inheritReadPreference(array $options): array
     {
         // ReadConcern and ReadPreference may not change within a transaction
-        if (! isset($options['readPreference']) && ! $this->is_in_transaction($options)) {
+        if (! isset($options['readPreference']) && ! StaticFunctions::is_in_transaction($options)) {
             $options['readPreference'] = $this->readPreference;
         }
 
@@ -1135,21 +1135,12 @@ class Collection
     private function inheritWriteOptions(array $options): array
     {
         // WriteConcern may not change within a transaction
-        if (!$this->is_in_transaction($options)) {
+        if (!StaticFunctions::is_in_transaction($options)) {
             if (! isset($options['writeConcern'])) {
                 $options['writeConcern'] = $this->writeConcern;
             }
         }
 
         return $options;
-    }
-
-    private function is_in_transaction(array $options): bool
-    {
-    if (isset($options['session']) && $options['session'] instanceof Session && $options['session']->isInTransaction()) {
-        return true;
-    }
-
-    return false;
     }
 }

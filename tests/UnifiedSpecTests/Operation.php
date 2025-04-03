@@ -20,9 +20,9 @@ use MongoDB\Operation\FindOneAndUpdate;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Constraint\IsType;
 use PHPUnit\Framework\Exception as PHPUnitException;
+use StaticFunctions;
 use stdClass;
 use Throwable;
-
 use function array_diff_key;
 use function array_intersect_key;
 use function array_key_exists;
@@ -33,7 +33,6 @@ use function fwrite;
 use function hex2bin;
 use function iterator_to_array;
 use function key;
-use function MongoDB\with_transaction;
 use function PHPUnit\Framework\assertArrayHasKey;
 use function PHPUnit\Framework\assertContains;
 use function PHPUnit\Framework\assertCount;
@@ -759,7 +758,7 @@ final class Operation
                     }
                 };
 
-                return with_transaction($session, $callback, array_diff_key($args, ['callback' => 1]));
+                return StaticFunctions::with_transaction($session, $callback, array_diff_key($args, ['callback' => 1]));
 
             default:
                 Assert::fail('Unsupported session operation: ' . $this->name);

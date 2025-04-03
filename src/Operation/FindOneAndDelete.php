@@ -21,8 +21,7 @@ use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
-
-use function MongoDB\is_document;
+use StaticFunctions;
 
 /**
  * Operation for deleting a document with the findAndModify command.
@@ -83,11 +82,11 @@ final class FindOneAndDelete implements Explainable
      */
     public function __construct(string $databaseName, string $collectionName, array|object $filter, array $options = [])
     {
-        if (! is_document($filter)) {
+        if (!StaticFunctions::is_document($filter)) {
             throw InvalidArgumentException::expectedDocumentType('$filter', $filter);
         }
 
-        if (isset($options['projection']) && ! is_document($options['projection'])) {
+        if (isset($options['projection']) && !StaticFunctions::is_document($options['projection'])) {
             throw InvalidArgumentException::expectedDocumentType('"projection" option', $options['projection']);
         }
 

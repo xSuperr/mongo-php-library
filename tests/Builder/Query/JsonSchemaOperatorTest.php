@@ -8,8 +8,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Query;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $jsonSchema query
@@ -20,19 +19,19 @@ class JsonSchemaOperatorTest extends PipelineTestCase
     {
         $pipeline = new Pipeline(
             Stage::match(
-                Query::jsonSchema(object(
+                Query::jsonSchema(StaticFunctions::object(
                     required: ['name', 'major', 'gpa', 'address'],
-                    properties: object(
-                        name: object(
+                    properties: StaticFunctions::object(
+                        name: StaticFunctions::object(
                             bsonType: 'string',
                             description: 'must be a string and is required',
                         ),
-                        address: object(
+                        address: StaticFunctions::object(
                             bsonType: 'object',
                             required: ['zipcode'],
-                            properties: object(
-                                zipcode: object(bsonType: 'string'),
-                                street: object(bsonType: 'string'),
+                            properties: StaticFunctions::object(
+                                zipcode: StaticFunctions::object(bsonType: 'string'),
+                                street: StaticFunctions::object(bsonType: 'string'),
                             ),
                         ),
                     ),

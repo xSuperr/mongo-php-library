@@ -23,13 +23,11 @@ use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\InvalidArgumentException;
-
+use StaticFunctions;
 use function is_array;
 use function is_bool;
 use function is_integer;
 use function is_string;
-use function MongoDB\is_document;
-use function MongoDB\is_pipeline;
 
 /**
  * Operation for the create command.
@@ -116,19 +114,19 @@ final class CreateCollection
             throw InvalidArgumentException::invalidType('"capped" option', $this->options['capped'], 'boolean');
         }
 
-        if (isset($this->options['changeStreamPreAndPostImages']) && ! is_document($this->options['changeStreamPreAndPostImages'])) {
+        if (isset($this->options['changeStreamPreAndPostImages']) && !StaticFunctions::is_document($this->options['changeStreamPreAndPostImages'])) {
             throw InvalidArgumentException::expectedDocumentType('"changeStreamPreAndPostImages" option', $this->options['changeStreamPreAndPostImages']);
         }
 
-        if (isset($this->options['clusteredIndex']) && ! is_document($this->options['clusteredIndex'])) {
+        if (isset($this->options['clusteredIndex']) && !StaticFunctions::is_document($this->options['clusteredIndex'])) {
             throw InvalidArgumentException::expectedDocumentType('"clusteredIndex" option', $this->options['clusteredIndex']);
         }
 
-        if (isset($this->options['collation']) && ! is_document($this->options['collation'])) {
+        if (isset($this->options['collation']) && !StaticFunctions::is_document($this->options['collation'])) {
             throw InvalidArgumentException::expectedDocumentType('"collation" option', $this->options['collation']);
         }
 
-        if (isset($this->options['encryptedFields']) && ! is_document($this->options['encryptedFields'])) {
+        if (isset($this->options['encryptedFields']) && !StaticFunctions::is_document($this->options['encryptedFields'])) {
             throw InvalidArgumentException::expectedDocumentType('"encryptedFields" option', $this->options['encryptedFields']);
         }
 
@@ -136,7 +134,7 @@ final class CreateCollection
             throw InvalidArgumentException::invalidType('"expireAfterSeconds" option', $this->options['expireAfterSeconds'], 'integer');
         }
 
-        if (isset($this->options['indexOptionDefaults']) && ! is_document($this->options['indexOptionDefaults'])) {
+        if (isset($this->options['indexOptionDefaults']) && !StaticFunctions::is_document($this->options['indexOptionDefaults'])) {
             throw InvalidArgumentException::expectedDocumentType('"indexOptionDefaults" option', $this->options['indexOptionDefaults']);
         }
 
@@ -160,11 +158,11 @@ final class CreateCollection
             throw InvalidArgumentException::invalidType('"size" option', $this->options['size'], 'integer');
         }
 
-        if (isset($this->options['storageEngine']) && ! is_document($this->options['storageEngine'])) {
+        if (isset($this->options['storageEngine']) && !StaticFunctions::is_document($this->options['storageEngine'])) {
             throw InvalidArgumentException::expectedDocumentType('"storageEngine" option', $this->options['storageEngine']);
         }
 
-        if (isset($this->options['timeseries']) && ! is_document($this->options['timeseries'])) {
+        if (isset($this->options['timeseries']) && !StaticFunctions::is_document($this->options['timeseries'])) {
             throw InvalidArgumentException::expectedDocumentType('"timeseries" option', $this->options['timeseries']);
         }
 
@@ -176,7 +174,7 @@ final class CreateCollection
             throw InvalidArgumentException::invalidType('"validationLevel" option', $this->options['validationLevel'], 'string');
         }
 
-        if (isset($this->options['validator']) && ! is_document($this->options['validator'])) {
+        if (isset($this->options['validator']) && !StaticFunctions::is_document($this->options['validator'])) {
             throw InvalidArgumentException::expectedDocumentType('"validator" option', $this->options['validator']);
         }
 
@@ -192,7 +190,7 @@ final class CreateCollection
             unset($this->options['writeConcern']);
         }
 
-        if (isset($this->options['pipeline']) && ! is_pipeline($this->options['pipeline'], true /* allowEmpty */)) {
+        if (isset($this->options['pipeline']) && !StaticFunctions::is_pipeline($this->options['pipeline'], true /* allowEmpty */)) {
             throw new InvalidArgumentException('"pipeline" option is not a valid aggregation pipeline');
         }
     }

@@ -9,8 +9,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Query;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $lookup stage
@@ -24,7 +23,7 @@ class LookupStageTest extends PipelineTestCase
                 from: 'restaurants',
                 localField: 'restaurant_name',
                 foreignField: 'name',
-                let: object(
+                let: StaticFunctions::object(
                     orders_drink: Expression::fieldPath('drink'),
                 ),
                 pipeline: new Pipeline(
@@ -69,7 +68,7 @@ class LookupStageTest extends PipelineTestCase
                     ),
                     Stage::project(
                         _id: 0,
-                        date: object(
+                        date: StaticFunctions::object(
                             name: Expression::stringFieldPath('name'),
                             date: Expression::dateFieldPath('date'),
                         ),
@@ -88,7 +87,7 @@ class LookupStageTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::lookup(
                 from: 'warehouses',
-                let: object(
+                let: StaticFunctions::object(
                     order_item: Expression::fieldPath('item'),
                     order_qty: Expression::intFieldPath('ordered'),
                 ),

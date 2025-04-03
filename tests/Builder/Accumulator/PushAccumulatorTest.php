@@ -10,8 +10,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Builder\Type\Sort;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $push accumulator
@@ -26,7 +25,7 @@ class PushAccumulatorTest extends PipelineTestCase
                 item: Sort::Asc,
             ),
             Stage::group(
-                _id: object(
+                _id: StaticFunctions::object(
                     day: Expression::dayOfYear(
                         Expression::dateFieldPath('date'),
                     ),
@@ -35,7 +34,7 @@ class PushAccumulatorTest extends PipelineTestCase
                     ),
                 ),
                 itemsSold: Accumulator::push(
-                    object(
+                    StaticFunctions::object(
                         item: Expression::fieldPath('item'),
                         quantity: Expression::intFieldPath('quantity'),
                     ),
@@ -51,10 +50,10 @@ class PushAccumulatorTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::setWindowFields(
                 partitionBy: Expression::fieldPath('state'),
-                sortBy: object(
+                sortBy: StaticFunctions::object(
                     orderDate: Sort::Asc,
                 ),
-                output: object(
+                output: StaticFunctions::object(
                     quantitiesForState: Accumulator::outputWindow(
                         Accumulator::push(
                             Expression::numberFieldPath('quantity'),

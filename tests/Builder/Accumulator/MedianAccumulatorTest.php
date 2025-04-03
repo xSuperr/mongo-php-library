@@ -10,8 +10,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Builder\Type\Sort;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $median accumulator
@@ -37,10 +36,10 @@ class MedianAccumulatorTest extends PipelineTestCase
     {
         $pipeline = new Pipeline(
             Stage::setWindowFields(
-                sortBy: object(
+                sortBy: StaticFunctions::object(
                     test01: Sort::Asc,
                 ),
-                output: object(
+                output: StaticFunctions::object(
                     test01_median: Accumulator::outputWindow(
                         Accumulator::median(
                             input: Expression::intFieldPath('test01'),

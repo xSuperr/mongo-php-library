@@ -7,8 +7,7 @@ namespace MongoDB\Tests\Builder\Stage;
 use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $collStats stage
@@ -19,7 +18,7 @@ class CollStatsStageTest extends PipelineTestCase
     {
         $pipeline = new Pipeline(
             Stage::collStats(
-                count: object(),
+                count: StaticFunctions::object(),
             ),
         );
 
@@ -30,7 +29,7 @@ class CollStatsStageTest extends PipelineTestCase
     {
         $pipeline = new Pipeline(
             Stage::collStats(
-                latencyStats: object(
+                latencyStats: StaticFunctions::object(
                     histograms: true,
                 ),
             ),
@@ -43,7 +42,7 @@ class CollStatsStageTest extends PipelineTestCase
     {
         $pipeline = new Pipeline(
             Stage::collStats(
-                queryExecStats: object(),
+                queryExecStats: StaticFunctions::object(),
             ),
         );
 
@@ -54,7 +53,7 @@ class CollStatsStageTest extends PipelineTestCase
     {
         $pipeline = new Pipeline(
             Stage::collStats(
-                storageStats: object(),
+                storageStats: StaticFunctions::object(),
             ),
         );
 

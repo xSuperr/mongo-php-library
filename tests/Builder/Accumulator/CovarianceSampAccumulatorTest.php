@@ -10,8 +10,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Builder\Type\Sort;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $covarianceSamp accumulator
@@ -23,10 +22,10 @@ class CovarianceSampAccumulatorTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::setWindowFields(
                 partitionBy: Expression::stringFieldPath('state'),
-                sortBy: object(
+                sortBy: StaticFunctions::object(
                     orderDate: Sort::Asc,
                 ),
-                output: object(
+                output: StaticFunctions::object(
                     covarianceSampForState: Accumulator::outputWindow(
                         Accumulator::covarianceSamp(
                             Expression::year(

@@ -11,8 +11,7 @@ use MongoDB\Builder\Stage;
 use MongoDB\Builder\Type\Sort;
 use MongoDB\Builder\Type\TimeUnit;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $setWindowFields stage
@@ -24,8 +23,8 @@ class SetWindowFieldsStageTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::setWindowFields(
                 partitionBy: Expression::stringFieldPath('state'),
-                sortBy: object(price: Sort::Asc),
-                output: object(
+                sortBy: StaticFunctions::object(price: Sort::Asc),
+                output: StaticFunctions::object(
                     quantityFromSimilarOrders: Accumulator::outputWindow(
                         Accumulator::sum(
                             Expression::numberFieldPath('quantity'),
@@ -44,8 +43,8 @@ class SetWindowFieldsStageTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::setWindowFields(
                 partitionBy: Expression::stringFieldPath('state'),
-                sortBy: object(orderDate: Sort::Asc),
-                output: object(
+                sortBy: StaticFunctions::object(orderDate: Sort::Asc),
+                output: StaticFunctions::object(
                     recentOrders: Accumulator::outputWindow(
                         Accumulator::push(
                             Expression::dateFieldPath('orderDate'),
@@ -65,8 +64,8 @@ class SetWindowFieldsStageTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::setWindowFields(
                 partitionBy: Expression::stringFieldPath('state'),
-                sortBy: object(orderDate: Sort::Asc),
-                output: object(
+                sortBy: StaticFunctions::object(orderDate: Sort::Asc),
+                output: StaticFunctions::object(
                     recentOrders: Accumulator::outputWindow(
                         Accumulator::push(
                             Expression::dateFieldPath('orderDate'),
@@ -88,8 +87,8 @@ class SetWindowFieldsStageTest extends PipelineTestCase
                 partitionBy: Expression::year(
                     Expression::dateFieldPath('orderDate'),
                 ),
-                sortBy: object(orderDate: Sort::Asc),
-                output: object(
+                sortBy: StaticFunctions::object(orderDate: Sort::Asc),
+                output: StaticFunctions::object(
                     cumulativeQuantityForYear: Accumulator::outputWindow(
                         Accumulator::sum(
                             Expression::numberFieldPath('quantity'),
@@ -114,8 +113,8 @@ class SetWindowFieldsStageTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::setWindowFields(
                 partitionBy: Expression::stringFieldPath('state'),
-                sortBy: object(orderDate: Sort::Asc),
-                output: object(
+                sortBy: StaticFunctions::object(orderDate: Sort::Asc),
+                output: StaticFunctions::object(
                     cumulativeQuantityForState: Accumulator::outputWindow(
                         Accumulator::sum(
                             Expression::numberFieldPath('quantity'),
@@ -136,8 +135,8 @@ class SetWindowFieldsStageTest extends PipelineTestCase
                 partitionBy: Expression::year(
                     Expression::dateFieldPath('orderDate'),
                 ),
-                sortBy: object(orderDate: Sort::Asc),
-                output: object(
+                sortBy: StaticFunctions::object(orderDate: Sort::Asc),
+                output: StaticFunctions::object(
                     cumulativeQuantityForYear: Accumulator::outputWindow(
                         Accumulator::sum(
                             Expression::numberFieldPath('quantity'),
@@ -158,8 +157,8 @@ class SetWindowFieldsStageTest extends PipelineTestCase
                 partitionBy: Expression::year(
                     Expression::dateFieldPath('orderDate'),
                 ),
-                sortBy: object(orderDate: Sort::Asc),
-                output: object(
+                sortBy: StaticFunctions::object(orderDate: Sort::Asc),
+                output: StaticFunctions::object(
                     averageQuantity: Accumulator::outputWindow(
                         Accumulator::avg(
                             Expression::numberFieldPath('quantity'),

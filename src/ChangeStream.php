@@ -27,7 +27,7 @@ use MongoDB\Driver\Exception\ServerException;
 use MongoDB\Exception\BadMethodCallException;
 use MongoDB\Exception\ResumeTokenException;
 use MongoDB\Model\ChangeStreamIterator;
-
+use StaticFunctions;
 use function assert;
 use function call_user_func;
 use function in_array;
@@ -189,7 +189,7 @@ class ChangeStream implements Iterator
             return true;
         }
 
-        if (server_supports_feature($this->iterator->getServer(), self::WIRE_VERSION_FOR_RESUMABLE_CHANGE_STREAM_ERROR)) {
+        if (StaticFunctions::server_supports_feature($this->iterator->getServer(), self::WIRE_VERSION_FOR_RESUMABLE_CHANGE_STREAM_ERROR)) {
             return $exception->hasErrorLabel('ResumableChangeStreamError');
         }
 

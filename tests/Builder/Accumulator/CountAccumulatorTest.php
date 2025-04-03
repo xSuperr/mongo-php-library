@@ -10,8 +10,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Builder\Type\Sort;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $count accumulator
@@ -35,10 +34,10 @@ class CountAccumulatorTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::setWindowFields(
                 partitionBy: Expression::fieldPath('state'),
-                sortBy: object(
+                sortBy: StaticFunctions::object(
                     orderDate: Sort::Asc,
                 ),
-                output: object(
+                output: StaticFunctions::object(
                     countNumberOfDocumentsForState: Accumulator::outputWindow(
                         Accumulator::count(),
                         documents: ['unbounded', 'current'],

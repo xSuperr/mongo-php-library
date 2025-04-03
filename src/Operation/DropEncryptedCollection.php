@@ -20,9 +20,7 @@ namespace MongoDB\Operation;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
-
-use function MongoDB\document_to_array;
-use function MongoDB\is_document;
+use StaticFunctions;
 
 /**
  * Drop an encrypted collection.
@@ -66,12 +64,12 @@ final class DropEncryptedCollection
             throw new InvalidArgumentException('"encryptedFields" option is required');
         }
 
-        if (! is_document($options['encryptedFields'])) {
+        if (!StaticFunctions::is_document($options['encryptedFields'])) {
             throw InvalidArgumentException::expectedDocumentType('"encryptedFields" option', $options['encryptedFields']);
         }
 
         /** @psalm-var array{ecocCollection?: ?string, escCollection?: ?string} */
-        $encryptedFields = document_to_array($options['encryptedFields']);
+        $encryptedFields = StaticFunctions::document_to_array($options['encryptedFields']);
 
         $this->dropMetadataCollections = [
             new DropCollection($databaseName, $encryptedFields['escCollection'] ?? 'enxcol_.' . $collectionName . '.esc'),

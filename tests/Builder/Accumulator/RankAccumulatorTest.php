@@ -10,8 +10,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Builder\Type\Sort;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $rank accumulator
@@ -23,10 +22,10 @@ class RankAccumulatorTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::setWindowFields(
                 partitionBy: Expression::stringFieldPath('state'),
-                sortBy: object(
-                    orderDate:Sort::Asc,
+                sortBy: StaticFunctions::object(
+                    orderDate: Sort::Asc,
                 ),
-                output: object(
+                output: StaticFunctions::object(
                     rankOrderDateForState: Accumulator::rank(),
                 ),
             ),
@@ -40,10 +39,10 @@ class RankAccumulatorTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::setWindowFields(
                 partitionBy: Expression::stringFieldPath('state'),
-                sortBy: object(
+                sortBy: StaticFunctions::object(
                     quantity: Sort::Desc,
                 ),
-                output: object(
+                output: StaticFunctions::object(
                     rankQuantityForState: Accumulator::rank(),
                 ),
             ),

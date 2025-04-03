@@ -8,8 +8,7 @@ use MongoDB\Builder\Expression;
 use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $toHashedIndexKey expression
@@ -20,7 +19,7 @@ class ToHashedIndexKeyOperatorTest extends PipelineTestCase
     {
         $pipeline = new Pipeline(
             Stage::documents([
-                object(val: 'string to hash'),
+                StaticFunctions::object(val: 'string to hash'),
             ]),
             Stage::addFields(
                 hashedVal: Expression::toHashedIndexKey(

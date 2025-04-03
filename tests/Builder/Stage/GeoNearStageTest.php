@@ -9,8 +9,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Query;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $geoNear stage
@@ -21,7 +20,7 @@ class GeoNearStageTest extends PipelineTestCase
     {
         $pipeline = new Pipeline(
             Stage::geoNear(
-                near: object(
+                near: StaticFunctions::object(
                     type: 'Point',
                     coordinates: [-73.99279, 40.719296],
                 ),
@@ -42,7 +41,7 @@ class GeoNearStageTest extends PipelineTestCase
     {
         $pipeline = new Pipeline(
             Stage::geoNear(
-                near: object(
+                near: StaticFunctions::object(
                     type: 'Point',
                     coordinates: [-73.99279, 40.719296],
                 ),
@@ -63,7 +62,7 @@ class GeoNearStageTest extends PipelineTestCase
     {
         $pipeline = new Pipeline(
             Stage::geoNear(
-                near: object(
+                near: StaticFunctions::object(
                     type: 'Point',
                     coordinates: [-73.98142, 40.71782],
                 ),
@@ -84,7 +83,7 @@ class GeoNearStageTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::lookup(
                 from: 'places',
-                let: object(
+                let: StaticFunctions::object(
                     pt: Expression::stringFieldPath('location'),
                 ),
                 pipeline: new Pipeline(

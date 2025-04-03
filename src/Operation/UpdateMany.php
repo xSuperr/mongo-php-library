@@ -22,9 +22,7 @@ use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
 use MongoDB\UpdateResult;
-
-use function MongoDB\is_first_key_operator;
-use function MongoDB\is_pipeline;
+use StaticFunctions;
 
 /**
  * Operation for updating multiple documents with the update command.
@@ -81,7 +79,7 @@ final class UpdateMany implements Explainable
      */
     public function __construct(string $databaseName, string $collectionName, array|object $filter, array|object $update, array $options = [])
     {
-        if (! is_first_key_operator($update) && ! is_pipeline($update)) {
+        if (!StaticFunctions::is_first_key_operator($update) && !StaticFunctions::is_pipeline($update)) {
             throw new InvalidArgumentException('Expected update operator(s) or non-empty pipeline for $update');
         }
 

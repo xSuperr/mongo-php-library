@@ -9,8 +9,7 @@ use MongoDB\Builder\Expression;
 use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $out stage
@@ -27,7 +26,7 @@ class OutStageTest extends PipelineTestCase
                 ),
             ),
             Stage::out(
-                object(
+                StaticFunctions::object(
                     db: 'reporting',
                     coll: 'authors',
                 ),

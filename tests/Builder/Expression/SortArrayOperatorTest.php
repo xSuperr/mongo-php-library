@@ -10,8 +10,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Builder\Type\Sort;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $sortArray expression
@@ -41,7 +40,7 @@ class SortArrayOperatorTest extends PipelineTestCase
                 result: Expression::sortArray(
                     input: Expression::arrayFieldPath('team'),
                     // @todo This object should be typed as "sort spec"
-                    sortBy: object(
+                    sortBy: StaticFunctions::object(
                         name: Sort::Asc,
                     ),
                 ),
@@ -77,13 +76,13 @@ class SortArrayOperatorTest extends PipelineTestCase
                     input: [
                         20,
                         4,
-                        object(a: 'Free'),
+                        StaticFunctions::object(a: 'Free'),
                         6,
                         21,
                         5,
                         'Gratis',
                         ['a' => null],
-                        object(a: object(sale: true, price: 19)),
+                        StaticFunctions::object(a: StaticFunctions::object(sale: true, price: 19)),
                         new Decimal128('10.23'),
                         ['a' => 'On sale'],
                     ],
@@ -103,7 +102,7 @@ class SortArrayOperatorTest extends PipelineTestCase
                 result: Expression::sortArray(
                     input: Expression::arrayFieldPath('team'),
                     // @todo This array should be typed as "sort spec"
-                    sortBy: object(
+                    sortBy: StaticFunctions::object(
                         age: Sort::Desc,
                         name: Sort::Asc,
                     ),

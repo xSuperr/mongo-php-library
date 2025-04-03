@@ -8,8 +8,7 @@ use MongoDB\Builder\Expression;
 use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $let expression
@@ -21,7 +20,7 @@ class LetOperatorTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::project(
                 finalTotal: Expression::let(
-                    vars: object(
+                    vars: StaticFunctions::object(
                         total: Expression::add(
                             Expression::numberFieldPath('price'),
                             Expression::numberFieldPath('tax'),

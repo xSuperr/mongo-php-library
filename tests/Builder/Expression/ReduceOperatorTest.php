@@ -10,8 +10,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Query;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $reduce expression
@@ -43,7 +42,7 @@ class ReduceOperatorTest extends PipelineTestCase
                 results: Expression::reduce(
                     Expression::arrayFieldPath('arr'),
                     [],
-                    object(
+                    StaticFunctions::object(
                         collapsed: Expression::concatArrays(
                             Expression::variable('value.collapsed'),
                             Expression::variable('this'),

@@ -10,8 +10,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Builder\Type\Sort;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $firstN accumulator
@@ -22,7 +21,7 @@ class FirstNAccumulatorTest extends PipelineTestCase
     {
         $pipeline = new Pipeline(
             Stage::group(
-                _id: object(
+                _id: StaticFunctions::object(
                     gameId: Expression::fieldPath('gameId'),
                 ),
                 gamescores: Accumulator::firstN(
@@ -85,11 +84,11 @@ class FirstNAccumulatorTest extends PipelineTestCase
     {
         $pipeline = new Pipeline(
             Stage::documents([
-                object(playerId: 'PlayerA', gameId: 'G1', score: 1),
-                object(playerId: 'PlayerB', gameId: 'G1', score: 2),
-                object(playerId: 'PlayerC', gameId: 'G1', score: 3),
-                object(playerId: 'PlayerD', gameId: 'G1'),
-                object(playerId: 'PlayerE', gameId: 'G1', score: null),
+                StaticFunctions::object(playerId: 'PlayerA', gameId: 'G1', score: 1),
+                StaticFunctions::object(playerId: 'PlayerB', gameId: 'G1', score: 2),
+                StaticFunctions::object(playerId: 'PlayerC', gameId: 'G1', score: 3),
+                StaticFunctions::object(playerId: 'PlayerD', gameId: 'G1'),
+                StaticFunctions::object(playerId: 'PlayerE', gameId: 'G1', score: null),
             ]),
             Stage::group(
                 _id: Expression::stringFieldPath('gameId'),

@@ -33,7 +33,7 @@ use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnexpectedValueException;
 use MongoDB\Exception\UnsupportedException;
 use MongoDB\Model\ChangeStreamIterator;
-
+use StaticFunctions;
 use function array_intersect_key;
 use function array_key_exists;
 use function array_unshift;
@@ -44,8 +44,6 @@ use function is_object;
 use function is_string;
 use function MongoDB\Driver\Monitoring\addSubscriber;
 use function MongoDB\Driver\Monitoring\removeSubscriber;
-use function MongoDB\is_document;
-use function MongoDB\select_server;
 
 /**
  * Operation for creating a change stream with the aggregate command.
@@ -215,11 +213,11 @@ final class Watch implements /* @internal */ CommandSubscriber
             throw InvalidArgumentException::invalidType('"readPreference" option', $options['readPreference'], ReadPreference::class);
         }
 
-        if (isset($options['resumeAfter']) && ! is_document($options['resumeAfter'])) {
+        if (isset($options['resumeAfter']) && !StaticFunctions::is_document($options['resumeAfter'])) {
             throw InvalidArgumentException::expectedDocumentType('"resumeAfter" option', $options['resumeAfter']);
         }
 
-        if (isset($options['startAfter']) && ! is_document($options['startAfter'])) {
+        if (isset($options['startAfter']) && !StaticFunctions::is_document($options['startAfter'])) {
             throw InvalidArgumentException::expectedDocumentType('"startAfter" option', $options['startAfter']);
         }
 
@@ -397,7 +395,7 @@ final class Watch implements /* @internal */ CommandSubscriber
          * is not usable within transactions, we still check if there is a
          * pinned session. This is to avoid an ambiguous error message about
          * running a command on the wrong server. */
-        $server = select_server($this->manager, $this->aggregateOptions);
+        $server = StaticFunctions::select_server($this->manager, $this->aggregateOptions);
 
         $resumeOption = isset($this->changeStreamOptions['startAfter']) && ! $hasAdvanced ? 'startAfter' : 'resumeAfter';
 

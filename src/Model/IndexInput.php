@@ -19,13 +19,11 @@ namespace MongoDB\Model;
 
 use MongoDB\BSON\Serializable;
 use MongoDB\Exception\InvalidArgumentException;
+use StaticFunctions;
 use stdClass;
-
 use function is_float;
 use function is_int;
 use function is_string;
-use function MongoDB\document_to_array;
-use function MongoDB\is_document;
 use function sprintf;
 
 /**
@@ -50,7 +48,7 @@ final class IndexInput implements Serializable
             throw new InvalidArgumentException('Required "key" document is missing from index specification');
         }
 
-        if (! is_document($index['key'])) {
+        if (!StaticFunctions::is_document($index['key'])) {
             throw InvalidArgumentException::expectedDocumentType('"key" option', $index['key']);
         }
 
@@ -97,7 +95,7 @@ final class IndexInput implements Serializable
      */
     private function generateIndexName(array|object $document): string
     {
-        $document = document_to_array($document);
+        $document = StaticFunctions::document_to_array($document);
 
         $name = '';
 

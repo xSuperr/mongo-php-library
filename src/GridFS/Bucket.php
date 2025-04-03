@@ -35,7 +35,7 @@ use MongoDB\GridFS\Exception\StreamException;
 use MongoDB\Model\BSONArray;
 use MongoDB\Model\BSONDocument;
 use MongoDB\Operation\Find;
-
+use StaticFunctions;
 use function array_intersect_key;
 use function array_key_exists;
 use function assert;
@@ -49,7 +49,6 @@ use function is_object;
 use function is_resource;
 use function is_string;
 use function method_exists;
-use function MongoDB\apply_type_map_to_document;
 use function property_exists;
 use function sprintf;
 use function str_contains;
@@ -396,7 +395,7 @@ class Bucket
         }
 
         // Filter the raw document through the specified type map
-        return apply_type_map_to_document($file, $this->typeMap);
+        return StaticFunctions::apply_type_map_to_document($file, $this->typeMap);
     }
 
     /**
@@ -415,7 +414,7 @@ class Bucket
          * the root type so we can reliably access the ID.
          */
         $typeMap = ['root' => 'stdClass'] + $this->typeMap;
-        $file = apply_type_map_to_document($file, $typeMap);
+        $file = StaticFunctions::apply_type_map_to_document($file, $typeMap);
         assert(is_object($file));
 
         if (! isset($file->_id) && ! property_exists($file, '_id')) {

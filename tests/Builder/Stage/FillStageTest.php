@@ -9,8 +9,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Builder\Type\Sort;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $fill stage
@@ -21,14 +20,14 @@ class FillStageTest extends PipelineTestCase
     {
         $pipeline = new Pipeline(
             Stage::fill(
-                sortBy: object(
+                sortBy: StaticFunctions::object(
                     date: Sort::Asc,
                 ),
-                partitionBy: object(
+                partitionBy: StaticFunctions::object(
                     restaurant: Expression::stringFieldPath('restaurant'),
                 ),
-                output: object(
-                    score: object(method: 'locf'),
+                output: StaticFunctions::object(
+                    score: StaticFunctions::object(method: 'locf'),
                 ),
             ),
         );
@@ -40,11 +39,11 @@ class FillStageTest extends PipelineTestCase
     {
         $pipeline = new Pipeline(
             Stage::fill(
-                sortBy: object(
+                sortBy: StaticFunctions::object(
                     date: Sort::Asc,
                 ),
-                output: object(
-                    score: object(method: 'locf'),
+                output: StaticFunctions::object(
+                    score: StaticFunctions::object(method: 'locf'),
                 ),
             ),
         );
@@ -56,10 +55,10 @@ class FillStageTest extends PipelineTestCase
     {
         $pipeline = new Pipeline(
             Stage::fill(
-                output: object(
-                    bootsSold: object(value: 0),
-                    sandalsSold: object(value: 0),
-                    sneakersSold: object(value: 0),
+                output: StaticFunctions::object(
+                    bootsSold: StaticFunctions::object(value: 0),
+                    sandalsSold: StaticFunctions::object(value: 0),
+                    sneakersSold: StaticFunctions::object(value: 0),
                 ),
             ),
         );
@@ -71,11 +70,11 @@ class FillStageTest extends PipelineTestCase
     {
         $pipeline = new Pipeline(
             Stage::fill(
-                sortBy: object(
+                sortBy: StaticFunctions::object(
                     time: Sort::Asc,
                 ),
-                output: object(
-                    price: object(method: 'linear'),
+                output: StaticFunctions::object(
+                    price: StaticFunctions::object(method: 'linear'),
                 ),
             ),
         );
@@ -97,11 +96,11 @@ class FillStageTest extends PipelineTestCase
                 ),
             ),
             Stage::fill(
-                sortBy: object(
+                sortBy: StaticFunctions::object(
                     date: Sort::Asc,
                 ),
-                output: object(
-                    score: object(method: 'locf'),
+                output: StaticFunctions::object(
+                    score: StaticFunctions::object(method: 'locf'),
                 ),
             ),
         );

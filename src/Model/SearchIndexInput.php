@@ -19,10 +19,9 @@ namespace MongoDB\Model;
 
 use MongoDB\BSON\Serializable;
 use MongoDB\Exception\InvalidArgumentException;
+use StaticFunctions;
 use stdClass;
-
 use function is_string;
-use function MongoDB\is_document;
 
 /**
  * Search index input model class.
@@ -46,7 +45,7 @@ final class SearchIndexInput implements Serializable
             throw new InvalidArgumentException('Required "definition" document is missing from search index specification');
         }
 
-        if (! is_document($index['definition'])) {
+        if (!StaticFunctions::is_document($index['definition'])) {
             throw InvalidArgumentException::expectedDocumentType('"definition" option', $index['definition']);
         }
 

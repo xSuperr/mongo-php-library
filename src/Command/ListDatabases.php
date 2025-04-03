@@ -23,12 +23,11 @@ use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnexpectedValueException;
-
+use StaticFunctions;
 use function current;
 use function is_array;
 use function is_bool;
 use function is_integer;
-use function MongoDB\is_document;
 
 /**
  * Wrapper for the ListDatabases command.
@@ -72,7 +71,7 @@ final class ListDatabases
             throw InvalidArgumentException::invalidType('"authorizedDatabases" option', $options['authorizedDatabases'], 'boolean');
         }
 
-        if (isset($options['filter']) && ! is_document($options['filter'])) {
+        if (isset($options['filter']) && !StaticFunctions::is_document($options['filter'])) {
             throw InvalidArgumentException::expectedDocumentType('"filter" option', $options['filter']);
         }
 

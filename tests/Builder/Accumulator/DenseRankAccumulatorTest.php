@@ -10,8 +10,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Builder\Type\Sort;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $denseRank accumulator
@@ -23,10 +22,10 @@ class DenseRankAccumulatorTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::setWindowFields(
                 partitionBy: Expression::stringFieldPath('state'),
-                sortBy: object(
+                sortBy: StaticFunctions::object(
                     orderDate: Sort::Asc,
                 ),
-                output: object(
+                output: StaticFunctions::object(
                     denseRankOrderDateForState: Accumulator::outputWindow(
                         Accumulator::denseRank(),
                     ),
@@ -42,11 +41,11 @@ class DenseRankAccumulatorTest extends PipelineTestCase
         $pipeline = new Pipeline(
             Stage::setWindowFields(
                 partitionBy: Expression::stringFieldPath('state'),
-                sortBy: object(
+                sortBy: StaticFunctions::object(
                     quantity: Sort::Desc,
                 ),
-                output: object(
-                    // The outputWindow is optional when no window property is set.
+                output: StaticFunctions::object(
+                // The outputWindow is optional when no window property is set.
                     denseRankQuantityForState: Accumulator::denseRank(),
                 ),
             ),

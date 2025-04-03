@@ -10,8 +10,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Builder\Type\Sort;
 use MongoDB\Tests\Builder\PipelineTestCase;
-
-use function MongoDB\object;
+use StaticFunctions;
 
 /**
  * Test $percentile accumulator
@@ -69,10 +68,10 @@ class PercentileAccumulatorTest extends PipelineTestCase
     {
         $pipeline = new Pipeline(
             Stage::setWindowFields(
-                sortBy: object(
+                sortBy: StaticFunctions::object(
                     test01: Sort::Asc,
                 ),
-                output: object(
+                output: StaticFunctions::object(
                     test01_95percentile: Accumulator::outputWindow(
                         Accumulator::percentile(
                             input: Expression::numberFieldPath('test01'),

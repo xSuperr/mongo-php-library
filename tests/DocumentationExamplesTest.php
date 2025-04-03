@@ -14,7 +14,7 @@ use MongoDB\Driver\ReadPreference;
 use MongoDB\Tests\SpecTests\ClientSideEncryptionSpecTest;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\Attributes\Group;
-
+use StaticFunctions;
 use function base64_decode;
 use function in_array;
 use function microtime;
@@ -1857,7 +1857,7 @@ class DocumentationExamplesTest extends FunctionalTestCase
 
         // Step 3: Use with_transaction to start a transaction, execute the callback, and commit (or abort on error).
 
-        \MongoDB\with_transaction($session, $callback);
+        StaticFunctions::with_transaction($session, $callback);
 
         // End Transactions withTxn API Example 1
         // phpcs:enable
