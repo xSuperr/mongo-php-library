@@ -22,6 +22,7 @@ use Iterator;
 use MongoDB\BSON\Document;
 use MongoDB\BSON\PackedArray;
 use MongoDB\Builder\BuilderEncoder;
+use MongoDB\Driver\Session;
 use MongoDB\Builder\Pipeline;
 use MongoDB\Codec\DocumentCodec;
 use MongoDB\Codec\Encoder;
