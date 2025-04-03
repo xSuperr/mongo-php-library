@@ -1097,7 +1097,7 @@ class Collection
     private function inheritReadConcern(array $options): array
     {
         // ReadConcern and ReadPreference may not change within a transaction
-        if (! isset($options['readConcern']) && ! is_in_transaction($options)) {
+        if (! isset($options['readConcern']) && ! $this->is_in_transaction($options)) {
             $options['readConcern'] = $this->readConcern;
         }
 
@@ -1114,7 +1114,7 @@ class Collection
     private function inheritReadPreference(array $options): array
     {
         // ReadConcern and ReadPreference may not change within a transaction
-        if (! isset($options['readPreference']) && ! is_in_transaction($options)) {
+        if (! isset($options['readPreference']) && ! $this->is_in_transaction($options)) {
             $options['readPreference'] = $this->readPreference;
         }
 
@@ -1134,12 +1134,21 @@ class Collection
     private function inheritWriteOptions(array $options): array
     {
         // WriteConcern may not change within a transaction
-        if (! is_in_transaction($options)) {
+        if (!$this->is_in_transaction($options)) {
             if (! isset($options['writeConcern'])) {
                 $options['writeConcern'] = $this->writeConcern;
             }
         }
 
         return $options;
+    }
+
+    private function is_in_transaction(array $options): bool
+    {
+    if (isset($options['session']) && $options['session'] instanceof Session && $options['session']->isInTransaction()) {
+        return true;
+    }
+
+    return false;
     }
 }
