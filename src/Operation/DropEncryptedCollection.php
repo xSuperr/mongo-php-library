@@ -20,7 +20,7 @@ namespace MongoDB\Operation;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 
 /**
  * Drop an encrypted collection.

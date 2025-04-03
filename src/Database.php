@@ -50,7 +50,7 @@ use MongoDB\Operation\ListCollections;
 use MongoDB\Operation\ModifyCollection;
 use MongoDB\Operation\RenameCollection;
 use MongoDB\Operation\Watch;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use stdClass;
 use Throwable;
 use function is_array;

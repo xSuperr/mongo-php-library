@@ -23,7 +23,7 @@ use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
 use MongoDB\Exception\InvalidArgumentException;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use function is_bool;
 use function is_integer;
 

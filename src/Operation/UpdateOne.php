@@ -22,7 +22,7 @@ use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
 use MongoDB\UpdateResult;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 
 /**
  * Operation for updating a single document with the update command.

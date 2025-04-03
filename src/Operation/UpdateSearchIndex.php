@@ -22,7 +22,7 @@ use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 
 /**
  * Operation for the createIndexes command.

@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use function func_get_args;
 use function MongoDB\Driver\Monitoring\mongoc_log;
 use function sprintf;

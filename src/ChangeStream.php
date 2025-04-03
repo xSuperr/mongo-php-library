@@ -27,7 +27,7 @@ use MongoDB\Driver\Exception\ServerException;
 use MongoDB\Exception\BadMethodCallException;
 use MongoDB\Exception\ResumeTokenException;
 use MongoDB\Model\ChangeStreamIterator;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use function assert;
 use function call_user_func;
 use function in_array;

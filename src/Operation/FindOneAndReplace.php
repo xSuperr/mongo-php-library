@@ -22,7 +22,7 @@ use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use function array_key_exists;
 use function is_integer;
 

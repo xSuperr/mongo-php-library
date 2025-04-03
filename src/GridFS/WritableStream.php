@@ -22,7 +22,7 @@ use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Exception\InvalidArgumentException;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use function array_intersect_key;
 use function is_integer;
 use function sprintf;

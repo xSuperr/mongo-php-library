@@ -21,7 +21,7 @@ use ArrayObject;
 use JsonSerializable;
 use MongoDB\BSON\Serializable;
 use MongoDB\BSON\Unserializable;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use function array_values;
 
 /**

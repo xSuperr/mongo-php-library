@@ -10,7 +10,7 @@ use MongoDB\Builder\Search;
 use MongoDB\Builder\Stage;
 use MongoDB\Builder\Type\Sort;
 use MongoDB\Tests\Builder\PipelineTestCase;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 
 /**
  * Test embeddedDocument search

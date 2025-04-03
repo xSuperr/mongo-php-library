@@ -13,7 +13,7 @@ use MongoDB\Builder\Search;
 use MongoDB\Builder\Stage;
 use MongoDB\Builder\Variable;
 use MongoDB\Tests\Builder\PipelineTestCase;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 
 /**
  * Test $search stage

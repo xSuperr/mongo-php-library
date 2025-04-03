@@ -69,7 +69,7 @@ use MongoDB\Operation\UpdateMany;
 use MongoDB\Operation\UpdateOne;
 use MongoDB\Operation\UpdateSearchIndex;
 use MongoDB\Operation\Watch;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use stdClass;
 use function array_diff_key;
 use function array_intersect_key;

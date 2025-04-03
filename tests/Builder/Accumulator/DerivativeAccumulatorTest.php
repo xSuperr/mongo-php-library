@@ -12,7 +12,7 @@ use MongoDB\Builder\Stage;
 use MongoDB\Builder\Type\Sort;
 use MongoDB\Builder\Type\TimeUnit;
 use MongoDB\Tests\Builder\PipelineTestCase;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 
 /**
  * Test $derivative accumulator

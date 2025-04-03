@@ -26,7 +26,7 @@ use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
 use MongoDB\InsertOneResult;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use function is_bool;
 
 /**

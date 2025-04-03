@@ -6,7 +6,7 @@ use MongoDB\Driver\ReadPreference;
 use MongoDB\Driver\Server;
 use MongoDB\Tests\FunctionalTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 
 class SelectServerFunctionalTest extends FunctionalTestCase
 {

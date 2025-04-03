@@ -33,7 +33,7 @@ use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnexpectedValueException;
 use MongoDB\Exception\UnsupportedException;
 use MongoDB\Model\ChangeStreamIterator;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use function array_intersect_key;
 use function array_key_exists;
 use function array_unshift;

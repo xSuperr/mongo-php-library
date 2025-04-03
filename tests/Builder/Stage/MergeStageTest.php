@@ -11,7 +11,7 @@ use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Query;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 
 /**
  * Test $merge stage

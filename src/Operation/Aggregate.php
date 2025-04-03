@@ -30,7 +30,7 @@ use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnexpectedValueException;
 use MongoDB\Exception\UnsupportedException;
 use MongoDB\Model\CodecCursor;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use stdClass;
 use function is_array;
 use function is_bool;

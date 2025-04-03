@@ -20,7 +20,7 @@ use MongoDB\Operation\FindOneAndUpdate;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Constraint\IsType;
 use PHPUnit\Framework\Exception as PHPUnitException;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use stdClass;
 use Throwable;
 use function array_diff_key;

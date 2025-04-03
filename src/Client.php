@@ -43,7 +43,7 @@ use MongoDB\Operation\DropDatabase;
 use MongoDB\Operation\ListDatabaseNames;
 use MongoDB\Operation\ListDatabases;
 use MongoDB\Operation\Watch;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use stdClass;
 use Throwable;
 use function array_diff_key;

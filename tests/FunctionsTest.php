@@ -10,7 +10,7 @@ use MongoDB\Driver\WriteConcern;
 use MongoDB\Model\BSONArray;
 use MongoDB\Model\BSONDocument;
 use PHPUnit\Framework\Attributes\DataProvider;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use TypeError;
 
 /**

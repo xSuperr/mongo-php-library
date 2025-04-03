@@ -15,7 +15,7 @@ use MongoDB\GridFS\Bucket;
 use MongoDB\Operation\FindOneAndReplace;
 use MongoDB\Operation\FindOneAndUpdate;
 use PHPUnit\Framework\Assert;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use stdClass;
 use function array_diff_key;
 use function array_map;

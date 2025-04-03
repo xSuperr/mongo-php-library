@@ -6,7 +6,7 @@ namespace MongoDB\Examples\WithTransaction;
 use MongoDB\BSON\Document;
 use MongoDB\Client;
 use MongoDB\Driver\Session;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use function assert;
 use function getenv;
 use function is_object;

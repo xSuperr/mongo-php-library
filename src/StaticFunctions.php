@@ -1,5 +1,12 @@
 <?php
 
+namespace MongoDB;
+
+use Exception;
+use MongoDB\Driver\ReadPreference;
+use ReflectionClass;
+use ReflectionException;
+
 class StaticFunctions
 {
 

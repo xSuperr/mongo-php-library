@@ -14,7 +14,7 @@ use MongoDB\Driver\ReadPreference;
 use MongoDB\Tests\SpecTests\ClientSideEncryptionSpecTest;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\Attributes\Group;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use function base64_decode;
 use function in_array;
 use function microtime;

@@ -7,7 +7,7 @@ namespace MongoDB\Tests\Builder\Stage;
 use MongoDB\Builder\Pipeline;
 use MongoDB\Builder\Stage;
 use MongoDB\Tests\Builder\PipelineTestCase;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 
 /**
  * Test $collStats stage

@@ -19,7 +19,7 @@ namespace MongoDB\Model;
 
 use MongoDB\BSON\Serializable;
 use MongoDB\Exception\InvalidArgumentException;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use stdClass;
 use function is_string;
 

@@ -29,7 +29,7 @@ use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\ResumeTokenException;
 use MongoDB\Exception\UnexpectedValueException;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use function assert;
 use function count;
 use function is_array;

@@ -26,7 +26,7 @@ use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
 use MongoDB\InsertManyResult;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use function array_is_list;
 use function is_bool;
 use function sprintf;

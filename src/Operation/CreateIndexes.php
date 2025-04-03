@@ -25,7 +25,7 @@ use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
 use MongoDB\Model\IndexInput;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use function array_is_list;
 use function array_map;
 use function is_array;

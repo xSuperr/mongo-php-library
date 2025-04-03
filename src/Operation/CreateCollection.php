@@ -23,7 +23,7 @@ use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\InvalidArgumentException;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use function is_array;
 use function is_bool;
 use function is_integer;

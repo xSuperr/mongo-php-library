@@ -26,7 +26,7 @@ use MongoDB\Driver\Session;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnexpectedValueException;
 use MongoDB\Exception\UnsupportedException;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use function current;
 use function is_array;
 use function is_integer;

@@ -7,7 +7,7 @@ use MongoDB\Driver\Exception\InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerInterface;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use function func_get_args;
 
 /** @see https://jira.mongodb.org/browse/DRIVERS-2583 */

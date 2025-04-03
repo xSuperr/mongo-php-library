@@ -22,7 +22,7 @@ use MongoDB\Codec\EncodeIfSupported;
 use MongoDB\Codec\Encoder;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use function array_merge;
 use function var_export;
 

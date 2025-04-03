@@ -21,7 +21,7 @@ use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 
 /**
  * Operation for deleting a document with the findAndModify command.

@@ -11,7 +11,7 @@ use MongoDB\Builder\Type\WindowInterface;
 use MongoDB\Codec\EncodeIfSupported;
 use MongoDB\Codec\Encoder;
 use MongoDB\Exception\UnsupportedValueException;
-use StaticFunctions;
+use  MongoDB\StaticFunctions;
 use stdClass;
 use function array_key_first;
 use function get_debug_type;
